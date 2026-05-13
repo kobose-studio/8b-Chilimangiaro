@@ -5,62 +5,67 @@
     box-sizing: border-box;
 }
 
+/* Importiamo i font del rito */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap');
+
 body {
-    font-family: 'Helvetica Neue', sans-serif;
     background-color: #050505; /* Nero abissale */
     color: #f0f0f0;
-    overflow: hidden; /* Evitiamo scroll indesiderati per ora */
+    overflow: hidden;
 }
 
-/* Contenitore per il canvas 3D/Generativo in background */
 #canvas-container {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1; /* Lo mettiamo dietro a tutto */
+    z-index: -1;
     width: 100vw;
     height: 100vh;
 }
 
-/* Tipografia e Layout sovrapposto */
 .content {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     z-index: 10;
+}
+
+/* Layout del logo al centro */
+.logo-wrapper {
     text-align: center;
 }
 
-h1 {
-    font-size: 4rem;
-    letter-spacing: 0.2rem;
-    text-transform: uppercase;
+.main-logo {
+    max-width: 80%; /* Si adatta allo schermo */
+    height: auto;
+    max-height: 400px;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2)); /* Un leggero bagliore */
 }
 
-.subtitle {
-    margin-top: 1rem;
-    font-size: 1.2rem;
-    opacity: 0.7;
-    letter-spacing: 0.1rem;
+/* Footer per i link, come in Discolow */
+.social-footer {
+    position: fixed;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 100;
 }
 
-/* Un bottone che non è solo un bottone, ma una porta d'accesso */
-.cyber-btn {
-    margin-top: 3rem;
-    display: inline-block;
-    padding: 1rem 2rem;
-    border: 1px solid #fff;
-    color: #fff;
+.footer-link {
+    font-family: 'Open Sans', sans-serif;
+    color: #f0f0f0;
     text-decoration: none;
     text-transform: uppercase;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
+    font-size: 0.9rem;
+    letter-spacing: 0.1rem;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
 }
 
-.cyber-btn:hover {
-    background-color: #fff;
-    color: #000;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+.footer-link:hover {
+    opacity: 1;
 }
