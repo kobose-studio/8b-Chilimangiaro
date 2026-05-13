@@ -1,71 +1,116 @@
-/* Resettiamo il cosmo */
+/* SETUP & CROMIE (Ispirate al Logo) */
+:root {
+    --bg-color: #F2E8CF; /* Crema Vintage / Carta */
+    --text-color: #2B2D42; /* Antracite profondo */
+    --accent-color: #D64933; /* Arancio Vulcano */
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Importiamo i font del rito */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap');
-
 body {
-    background-color: #050505; /* Nero abissale */
-    color: #f0f0f0;
-    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Special Elite', cursive;
+    height: 100vh;
+    overflow: hidden; /* Niente scroll, è un'installazione fissa */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+/* CANVAS BACKGROUND: Miscelato col fondo vintage */
 #canvas-container {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    mix-blend-mode: multiply; 
+    opacity: 0.8;
 }
 
-.content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* INTERFACCIA CENTRALE */
+.main-ui {
+    position: relative;
     z-index: 10;
-}
-
-/* Layout del logo al centro */
-.logo-wrapper {
     text-align: center;
+    pointer-events: none; /* Lascia passare il click del mouse verso il canvas */
 }
 
-.main-logo {
-    max-width: 80%; /* Si adatta allo schermo */
-    height: auto;
-    max-height: 400px;
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2)); /* Un leggero bagliore */
+h1 {
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    color: var(--text-color);
 }
 
-/* Footer per i link, come in Discolow */
-.social-footer {
+.tagline {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-top: 1px solid var(--text-color);
+    border-bottom: 1px solid var(--text-color);
+    padding: 5px 20px;
+    display: inline-block;
+}
+
+/* FOOTER (Stile Discolow) */
+footer {
     position: fixed;
-    bottom: 30px;
+    bottom: 0;
     left: 0;
-    right: 0;
+    width: 100%;
+    padding: 30px 40px;
     display: flex;
     justify-content: space-between;
-    padding: 0 40px;
-    z-index: 100;
+    align-items: flex-end;
+    z-index: 20;
+    pointer-events: auto; /* Riattiva i click per i link */
 }
 
 .footer-link {
-    font-family: 'Open Sans', sans-serif;
-    color: #f0f0f0;
+    color: var(--text-color);
     text-decoration: none;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.1rem;
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .footer-link:hover {
-    opacity: 1;
+    color: var(--accent-color); /* Hover arancio lava */
+    transform: translateY(-3px);
+}
+
+.footer-link i {
+    font-size: 1.4rem;
+}
+
+/* Decorazione Archivio */
+.serial-number {
+    position: fixed;
+    top: 30px;
+    left: 40px;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    letter-spacing: 2px;
+    z-index: 20;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
 }
