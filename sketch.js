@@ -1,50 +1,67 @@
-// Variabili per la generazione del terreno (Perlin Noise)
 let cols, rows;
-let scl = 20; // Scala della griglia
-let w = 2000; // Larghezza del terreno
-let h = 1000; // Profondità
-let flying = 0; // Variabile per far "volare" la telecamera
+let scl = 15; // Scala più fine per definire meglio il vulcano
+let w = 2000;
+let h = 1000;
+let flying = 0;
 let terrain = [];
 
+// Variabili per l'eruzione centrale
+let eruptionRadius;
+
 function setup() {
-    let canvas = createCanvas(windowWidth, windowHeight, WEBGL); // Attiviamo l'accelerazione 3D
-    canvas.parent('canvas-container'); // Inseriamo il canvas nel div corretto
+    let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+    canvas.parent('canvas-container');
     
     cols = w / scl;
     rows = h / scl;
     
-    // Inizializziamo l'array bidimensionale per le altezze
     for (let x = 0; x < cols; x++) {
         terrain[x] = [];
     }
+
+    // Parametri eruttivi: il raggio d'azione del vulcano
+    eruptionRadius = w / 4; 
 }
 
 function draw() {
-    flying -= 0.05; // Velocità di scorrimento in avanti
+    flying -= 0.03; // Velocità di scorrimento ridotta per un effetto più solido
     let yoff = flying;
     
-    // Generiamo l'altimetria usando il rumore di Perlin per simulare montagne
     for (let y = 0; y < rows; y++) {
         let xoff = 0;
         for (let x = 0; x < cols; x++) {
-            // Il mouse sull'asse X altera l'altezza delle montagne!
-            let heightMultiplier = map(mouseX, 0, width, 50, 250); 
-            terrain[x][y] = map(noise(xoff, yoff), 0, 1, -heightMultiplier, heightMultiplier);
-            xoff += 0.2;
+            
+            // Calcoliamo la distanza di questo punto dal centro
+            let dx = x * scl - w / 2;
+            let dy = y * scl - h / 2;
+            let d = sqrt(dx * dx + dy * dy);
+
+            // Definiamo la "maschera eruttiva centrale"
+            // Se d è minore del raggio d'eruzione, applichiamo un multiplier
+            let mask = map(d, 0, eruptionRadius, 1, 0, true);
+            mask = constrain(mask, 0, 1); // Assicuriamoci sia tra 0 e 1
+            
+            // L'altezza massima (il "potere eruttivo")
+            // Aumenta con il mouseX, ma è concentrata al centro dal 'mask'
+            let rawHeight = map(mouseX, 0, width, 100, 350); 
+            let heightMultiplier = map(mask, 0, 1, 1, rawHeight);
+            
+            // Generiamo l'altimetria ponderata al centro
+            terrain[x][y] = map(noise(xoff, yoff), 0, 1, -heightMultiplier/2, heightMultiplier);
+            xoff += 0.15;
         }
-        yoff += 0.2;
+        yoff += 0.15;
     }
 
-    background(5); // Sfondo quasi nero
-    stroke(255, 50); // Linee bianche con molta trasparenza (effetto wireframe fantasma)
+    background(5); // Nero abissale
+    stroke(255, 30); // Linee bianche fantasma, più sottili
     noFill();
 
-    // Posizioniamo la telecamera
-    translate(0, 50);
-    rotateX(PI / 3); // Inkliniamo per vedere il "Chilimangiaro" dall'alto
-    translate(-w / 2, -h / 2 + 200);
+    translate(0, 80);
+    rotateX(PI / 2.5); // Angolatura più aggressiva per vedere il vulcano
+    translate(-w / 2, -h / 2 + 300);
 
-    // Disegniamo la montagna
+    // Disegniamo la montagna sonica
     for (let y = 0; y < rows - 1; y++) {
         beginShape(TRIANGLE_STRIP);
         for (let x = 0; x < cols; x++) {
@@ -55,7 +72,6 @@ function draw() {
     }
 }
 
-// Se l'utente ridimensiona la finestra, riadattiamo la tela
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
