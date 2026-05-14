@@ -9,6 +9,11 @@
    VERSION: 11.0 [NAME_FIX_&_TEXTURE]
 */
 
+/* CHILIMANGIARO - MAGMA_ROOTS_CSS v12.0
+   - FIX: Compattazione testi Manifesto su Mobile
+   - FIX: Footer allineato e contenuto su Mobile
+*/
+
 :root {
     --bg-color: #064f34; 
     --text-color: #FFFFFF; 
@@ -17,39 +22,16 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color);
-    font-family: 'Special Elite', cursive;
-    height: 100vh;
-    overflow: hidden;
-}
+body { background-color: var(--bg-color) !important; color: var(--text-color); font-family: 'Special Elite', cursive; height: 100vh; overflow: hidden; }
 
-/* Texture Noise Globale (Texture anche nell'overlay) */
-body::before, .overlay::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.15; 
-    mix-blend-mode: overlay;
-    z-index: 50; 
-    pointer-events: none; 
-}
+body::before, .overlay::before { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.15; mix-blend-mode: overlay; z-index: 50; pointer-events: none; }
 
 #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
-/* FIX RIPETIZIONE NOME BAND */
 .desktop-text { display: inline; }
 .mobile-text { display: none; }
 
-@media (max-width: 768px) {
-    .desktop-text { display: none; }
-    .mobile-text { display: inline; }
-}
-
-/* TRIGGER MANIFESTO / SERIAL */
-.serial-number { position: fixed; top: 30px; left: 0; width: 100%; text-align: center; font-size: 0.8rem; letter-spacing: 2px; z-index: 150; cursor: pointer; }
+.serial-number { position: fixed; top: 30px; left: 0; width: 100%; text-align: center; font-size: 0.8rem; z-index: 150; cursor: pointer; }
 .serial-number .hover-text { display: none; color: var(--accent-color); font-weight: bold; }
 .serial-number:hover .default-text { display: none; }
 .serial-number:hover .hover-text { display: inline; }
@@ -57,28 +39,42 @@ body::before, .overlay::before {
 /* UI CENTRALE */
 .main-ui { position: relative; z-index: 10; text-align: center; pointer-events: none; height: 100vh; display: flex; align-items: center; justify-content: center; }
 h1.large-chilimangiaro { font-size: clamp(2.5rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); }
-.tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; color: var(--text-color); margin-top: 10px; }
+.tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
 
 /* BOTTONE SUONO */
 .volcano-sound-container { position: fixed; bottom: 20vh; left: 50%; transform: translateX(-50%); z-index: 60; pointer-events: auto; display: flex; flex-direction: column; align-items: center; }
 #magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent !important; border: 2px solid var(--accent-color) !important; color: var(--accent-color) !important; font-family: inherit; font-size: 1rem; cursor: pointer; }
-.track-credits { font-size: 0.65rem; opacity: 0.15; margin-top: 15px; letter-spacing: 2px; text-transform: uppercase; transition: 0.8s; }
-.track-credits.active { opacity: 1; }
 
-/* OVERLAY MANIFESTO */
-.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(6, 79, 52, 0.98); z-index: 200; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.5s; }
+/* OVERLAY MANIFESTO COMPATTATO */
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(6, 79, 52, 0.98); z-index: 200; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.5s; overflow-y: auto; }
 .overlay.active { opacity: 1; visibility: visible; }
-.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 40px; z-index: 210; }
+.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 60px 20px; z-index: 210; }
 .overlay-content h2 { color: var(--accent-color); font-size: 2.5rem; margin-bottom: 25px; letter-spacing: 5px; }
-.manifesto-body p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
-.close-manifesto { position: absolute; top: 40px; right: 40px; background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 10px 20px; cursor: pointer; font-family: inherit; z-index: 220; }
+.manifesto-body p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px; }
+.close-manifesto { position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 8px 15px; cursor: pointer; font-size: 0.8rem; z-index: 220; }
 
 /* FOOTER QUADRIPARTITO */
-footer { position: fixed; bottom: 0; left: 0; width: 100%; padding: 30px 40px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 100; }
+footer { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 100; }
 .footer-block { flex: 1; pointer-events: auto; }
 .footer-block.mid-left, .footer-block.mid-right { text-align: center; }
 .footer-block.corner-right { text-align: right; }
-.footer-link { color: var(--text-color); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-.footer-link:hover { color: var(--accent-color); }
-.credits-text { font-size: 0.75rem; color: var(--text-color); opacity: 0.5; letter-spacing: 1px; }
-.credits-text a { color: var(--accent-color); text-decoration: none; }
+.footer-link { color: var(--text-color); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+.credits-text { font-size: 0.7rem; color: var(--text-color); opacity: 0.5; }
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 768px) {
+    .desktop-text { display: none; }
+    .mobile-text { display: inline; }
+    
+    /* Footer mobile: no overflow */
+    footer { position: relative; flex-direction: column; align-items: center; gap: 12px; padding: 30px 10px; background: rgba(0,0,0,0.2); }
+    .footer-block { text-align: center !important; width: 100%; }
+    .footer-link { justify-content: center; font-size: 0.8rem; }
+    
+    /* Manifesto mobile: compatto */
+    .overlay-content h2 { font-size: 1.8rem; }
+    .manifesto-body p { font-size: 0.95rem; line-height: 1.4; margin-bottom: 12px; }
+    
+    .volcano-sound-container { bottom: 25vh; }
+    #magma-sound-btn { min-width: 240px; font-size: 0.9rem; }
+}
