@@ -1,87 +1,67 @@
-/* SETUP & CROMIE: Il Vuoto e l'Eruzione */
 :root {
-    --bg-color: #050505; /* Ho scurito anche il fondo globale per allinearlo al canvas */
-    --text-color: #FFFFFF; /* Testi in bianco puro, massima leggibilità */
-    --accent-color: #D64933; /* Arancio-Rosso Vulcano per il Titolo */
+    --bg-color: #050505; /* Nero profondo */
+    --text-color: #FFFFFF; /* Testi bianchi */
+    --accent-color: #D64933; /* Rosso Magma dal logo */
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Special Elite', cursive;
     height: 100vh;
-    overflow: hidden; /* Blocchiamo l'asse Y, è un'installazione visiva */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* CANVAS BACKGROUND: Il terreno generativo */
 #canvas-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Il codice gira in background */
+    z-index: 1;
 }
 
-/* INTERFACCIA CENTRALE */
 .main-ui {
     position: relative;
     z-index: 10;
     text-align: center;
-    pointer-events: none; /* Lascia che il mouse "buchi" il div per interagire coi punti */
+    pointer-events: none; /* Lascia che il mouse tocchi i punti 3D dietro */
 }
 
-/* CENTRAL STACK */
 .central-stack {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
-/* IL LOGO (se deciderai di caricarlo su GitHub come logo.jpg) */
-.main-logo {
-    width: 100%;
-    max-width: 450px;
-    height: auto;
-    /* Se lo sfondo del logo è chiaro, manteniamo il multiply, 
-       altrimenti se vuoi un logo normale rimuovi la riga seguente */
-    mix-blend-mode: multiply; 
-    filter: contrast(1.1);
-}
-
-/* TITOLO PRINCIPALE: Rosso Magma */
+/* LA VETTA */
 h1.large-chilimangiaro {
-    font-size: clamp(2rem, 8vw, 4.5rem);
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
-    color: var(--accent-color); /* Colore rosso vulcano applicato */
+    font-size: clamp(3rem, 10vw, 6rem);
+    line-height: 1;
+    margin-bottom: 0;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+    text-shadow: 0 0 30px rgba(214, 73, 51, 0.3); /* Leggero bagliore */
 }
 
-/* TAGLINE: Bianca e senza righe */
 .tagline {
     font-size: 1.2rem;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--text-color); /* Bianco */
-    /* Linee di demarcazione (border-top e bottom) rimosse con successo */
-    padding: 5px 20px;
+    letter-spacing: 5px;
+    color: var(--text-color);
+    padding: 10px 20px;
     display: inline-block;
 }
 
-/* FOOTER (Stile Discolow) */
+/* FOOTER Stile Discolow */
 footer {
     position: fixed;
     bottom: 0;
@@ -92,11 +72,15 @@ footer {
     justify-content: space-between;
     align-items: flex-end;
     z-index: 20;
-    pointer-events: auto; /* Riattiva i click per la Mail e Instagram */
+    pointer-events: none; /* Il contenitore non blocca il mouse... */
+}
+
+footer > * {
+    pointer-events: auto; /* ...ma i link dentro sono cliccabili! FIX MAIL */
 }
 
 .footer-link {
-    color: var(--text-color); /* Bianco */
+    color: var(--text-color);
     text-decoration: none;
     font-size: 1.1rem;
     transition: all 0.3s ease;
@@ -106,29 +90,22 @@ footer {
 }
 
 .footer-link:hover {
-    color: var(--accent-color); /* Hover rosso vulcano */
+    color: var(--accent-color);
     transform: translateY(-3px);
 }
 
-.footer-link i {
-    font-size: 1.4rem;
-}
-
-/* Decorazione Archivio */
 .serial-number {
     position: fixed;
     top: 30px;
     left: 40px;
     font-size: 0.8rem;
-    color: var(--text-color); /* Bianco */
+    color: var(--text-color);
     opacity: 0.5;
     letter-spacing: 2px;
     z-index: 20;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
-    .main-logo { max-width: 280px; }
     footer {
         flex-direction: column;
         align-items: center;
