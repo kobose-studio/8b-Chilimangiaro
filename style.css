@@ -54,13 +54,12 @@ h1.large-chilimangiaro {
     line-height: 1.4;
 }
 
-/* BLINDATURA TIPOGRAFICA MOBILE VS DESKTOP */
 .mobile-text { display: none; }
 .desktop-text { display: inline; }
 
 .volcano-sound-container {
     position: fixed;
-    bottom: 20vh; /* ABBASSATO AL 20% DAL FONDO */
+    bottom: 20vh; 
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
@@ -70,8 +69,10 @@ h1.large-chilimangiaro {
     align-items: center;
 }
 
+/* BOTTONE CON FRAME FISSO */
 #magma-sound-btn {
     padding: 12px 30px;
+    min-width: 280px; /* DIMENSIONE FISSA: Impedisce il sussulto del frame */
     background-color: transparent !important;
     border: 2px solid var(--accent-color) !important;
     color: var(--accent-color) !important;
@@ -101,15 +102,20 @@ h1.large-chilimangiaro {
     100% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
 }
 
-/* TRACK CREDITS (Sigillo Sonoro) */
+/* TRACK CREDITS CON OPACITY DINAMICA */
 .track-credits {
     font-size: 0.65rem;
     color: var(--text-color);
-    opacity: 0.6;
+    opacity: 0.15; /* PENOMBRA INIZIALE */
     margin-top: 15px;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-align: center;
+    transition: opacity 0.8s ease; /* Transizione fluida */
+}
+
+.track-credits.active {
+    opacity: 1; /* LUCE PURA ALL'ATTIVAZIONE */
 }
 
 footer {
@@ -139,15 +145,12 @@ footer {
 @media (max-width: 768px) {
     .mobile-text { display: inline; }
     .desktop-text { display: none; }
-    
     h1.large-chilimangiaro { line-height: 0.85; margin-bottom: 15px; }
-    
     footer {
         display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;
         text-align: center;
     }
-    
     .footer-link { font-size: 0.9rem; }
-    
     .volcano-sound-container { bottom: 25vh; }
+    #magma-sound-btn { min-width: 240px; } /* Leggermente più piccolo su mobile */
 }
