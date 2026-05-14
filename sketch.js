@@ -4,6 +4,10 @@ let w, h;
 let flying = 0;
 let terrain = [];
 
+// REINTRODUZIONE DELLE PARTICELLE DINAMICHE
+let particles = [];
+let numParticles = 150; // Quanti puntini fluttuanti
+
 function setup() {
     let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
     canvas.parent('canvas-container');
@@ -13,9 +17,13 @@ function setup() {
     cols = floor(w / scl);
     rows = floor(h / scl);
 
+    // Griglia 3D WebGL (La Vetta)
     for (let x = 0; x < cols; x++) {
         terrain[x] = [];
     }
+
+    // Inizializzazione Particolati Dinamici (The Rogue Particles)
+    resetParticles();
 }
 
 function draw() {
@@ -24,12 +32,13 @@ function draw() {
     flying -= 0.025; 
     let yoff = flying;
 
-    let mouseGridX = map(mouseX, 0, width, 0, cols);
-    let mouseGridY = map(mouseY, 0, height, rows * 0.1, rows * 0.9); 
+    // Coordinate del mouse rispetto al centro per la Vetta 3D
+    let mappedMouseX = mouseX - width / 2;
+    let mappedMouseY = mouseY - height / 2;
     
-    // Leggiamo la potenza del suono dall'analizzatore (0 a 255)
     let amp = window.audioAmplitude || 0;
 
+    // --- GRIGLIA 3D WEBGL (La Vetta Dinamica) ---
     for (let y = 0; y < rows; y++) {
         let xoff = 0;
         for (let x = 0; x < cols; x++) {
@@ -43,15 +52,17 @@ function draw() {
             let audioBoost = map(amp, 0, 255, 0, 400); 
             let volcanoEffect = (baseVolcano + audioBoost) / (1 + pow(distFromCenter * 0.15, 2));
             
-            let dx = (x - mouseGridX) * 0.01; 
-            let dy = (y - mouseGridY) * 1.2; 
-            let distFascia = sqrt(dx*dx + dy*dy);
+            let actualX = x * scl - w/2;
+            let actualY = y * scl - h/2;
+            
+            // Interazione schiacciata in orizzontale
+            let distEllitticaHeight = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
             
             let mouseRepulsion = 0;
-            let heightTriggerRadius = 15; 
-            
-            if (distFascia < heightTriggerRadius) { 
-                mouseRepulsion = map(distFascia, 0, heightTriggerRadius, 250, 0); 
+            let heightTriggerRadius = 800; // Area molto ampia
+
+            if (distEllitticaHeight < heightTriggerRadius) { 
+                mouseRepulsion = map(distEllitticaHeight, 0, heightTriggerRadius, 250, 0); 
             }
 
             // JITTER SISMICO: Se l'audio suona, i punti vibrano freneticamente sul posto
@@ -70,24 +81,26 @@ function draw() {
     translate(-w / 2, -h / 2);
 
     for (let y = 0; y < rows - 1; y++) {
-        beginShape(POINTS); 
+        beginShape(POINTS); // Punti WebGL che formano il terreno
         for (let x = 0; x < cols; x++) {
             let z = terrain[x][y];
             
-            let dx = (x - mouseGridX) * 0.01; 
-            let dy = (y - mouseGridY) * 1.2; 
-            let distFasciaColor = sqrt(dx*dx + dy*dy);
+            let actualX = x * scl - w/2;
+            let actualY = y * scl - h/2;
             
-            let colorTriggerRadius = 22; 
+            // Stessa logica ellittica per il colore
+            let distEllitticaColor = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
+            let colorTriggerRadius = 900; // Area molto ampia
 
-            if (distFasciaColor < colorTriggerRadius) {
+            if (distEllitticaColor < colorTriggerRadius) {
                 // Durante l'audio, il colore rosso diventa più violento e accecante
                 let extraRed = map(amp, 0, 255, 0, 40);
-                let intensity = map(distFasciaColor, 0, colorTriggerRadius, 255, 60);
-                stroke(214 + extraRed, 73, 51, intensity); 
+                let intensity = map(distEllitticaColor, 0, colorTriggerRadius, 255, 120);
+                stroke(214 + extraRed, 73, 51, intensity); // Rosso Magma
                 strokeWeight(map(z, 0, -600, 3, 9)); 
             } else {
-                stroke(214, 73, 51, 60); 
+                // Penombra più visibile e materica
+                stroke(150, 40, 30, 180); // Rosso mattone semi-trasparente
                 strokeWeight(3.5); 
             }
             
@@ -95,6 +108,62 @@ function draw() {
         }
         endShape();
     }
+
+    // --- PARTICOLATI DINAMICI (The Rogue Particles) ---
+    // Questi puntini fluttuano nello spazio 3D indipendentemente dal terreno
+    push();
+    translate(w / 2, h / 2); // Li centralizziamo rispetto alla matrice terreno
+    particles.forEach(p => { p.update(amp); p.draw(); });
+    pop();
+}
+
+// Classe per i Particolati Dinamici (Rogue Engine p5.js Edition)
+class Particle {
+    constructor() { this.init(true); }
+    init(randomZ = false) {
+        // Nascono a caso nello spazio virtuale
+        this.x = random(-w / 2, w / 2);
+        this.y = random(-h / 2, h / 2);
+        // Se è l'init iniziale, partono sparsi, altrimenti nascono dal fondo vulcano
+        this.z = randomZ ? random(-600, 0) : random(-600, -500); 
+        this.size = random(2, 6);
+        // Velocità organica
+        this.velocityX = random(-0.5, 0.5);
+        this.velocityY = random(-0.5, 0.5);
+        this.velocityZ = random(0.2, 1); // Salgono
+        // Trasparenza organica (penombra)
+        this.alpha = random(40, 180);
+        this.baseZ = this.z;
+    }
+    update(amp) {
+        // JITTER SONORO SULLE PARTICELLE: Scuoti se c'è suono
+        let jitterX = map(amp, 0, 255, 0, 3) * (random() > 0.5 ? 1 : -1);
+        let jitterY = map(amp, 0, 255, 0, 3) * (random() > 0.5 ? 1 : -1);
+        
+        this.x += this.velocityX + jitterX;
+        this.y += this.velocityY + jitterY;
+        // Salgono, accelerate dai bassi
+        this.z += this.velocityZ + map(amp, 0, 255, 0, 2); 
+
+        // Se escono dallo spazio virtuale, rinascono dal fondo
+        if (this.z > 50) this.init();
+        if (this.x < -w / 2 || this.x > w / 2) this.init();
+        if (this.y < -h / 2 || this.y > h / 2) this.init();
+    }
+    draw() {
+        // Colore penombra, si accendono con l'audio (bassi)
+        let amp = window.audioAmplitude || 0;
+        let redBoost = map(amp, 0, 255, 0, 100);
+        // Un mix tra il verde smeraldo e il rosso magma
+        stroke(214 + redBoost, 73, 51, this.alpha);
+        strokeWeight(this.size);
+        point(this.x, this.y, this.z);
+    }
+}
+
+function resetParticles() {
+    particles = [];
+    for (let i = 0; i < numParticles; i++) particles.push(new Particle());
 }
 
 function windowResized() {
@@ -105,4 +174,5 @@ function windowResized() {
     rows = floor(h / scl);
     terrain = []; 
     for (let x = 0; x < cols; x++) { terrain[x] = []; }
+    resetParticles(); // Rigenera le particelle al resize
 }
