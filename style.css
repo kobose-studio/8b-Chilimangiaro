@@ -1,12 +1,11 @@
 :root {
-    --bg-color: #064f34; /* Verde foresta */
+    --bg-color: #064f34; 
     --text-color: #FFFFFF; 
     --accent-color: #D64933; 
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Disturbo analogico */
 body::before {
     content: "";
     position: fixed;
@@ -39,6 +38,7 @@ body {
 h1.large-chilimangiaro {
     font-size: clamp(3rem, 10vw, 6rem);
     line-height: 1;
+    margin-bottom: 0;
     letter-spacing: 2px;
     color: var(--accent-color);
     text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); 
@@ -48,17 +48,26 @@ h1.large-chilimangiaro {
     font-size: 1rem; 
     text-transform: uppercase;
     letter-spacing: 3px;
+    color: var(--text-color);
     padding: 10px 20px;
+    display: inline-block;
+    line-height: 1.4;
 }
 
-/* BOTTONE FRAMED OUTLINE */
+/* BLINDATURA TIPOGRAFICA MOBILE VS DESKTOP */
+.mobile-text { display: none; }
+.desktop-text { display: inline; }
+
 .volcano-sound-container {
     position: fixed;
-    bottom: 35vh; /* Alzato in mezzeria */
+    bottom: 20vh; /* ABBASSATO AL 20% DAL FONDO */
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
     pointer-events: auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #magma-sound-btn {
@@ -73,6 +82,7 @@ h1.large-chilimangiaro {
     transition: all 0.3s ease;
     text-transform: uppercase;
     border-radius: 0 !important;
+    outline: none;
 }
 
 #magma-sound-btn:hover, #magma-sound-btn.playing {
@@ -80,11 +90,33 @@ h1.large-chilimangiaro {
     box-shadow: 0 0 20px rgba(214, 73, 51, 0.5);
 }
 
+#magma-sound-btn.playing {
+    animation: pulse-magma 2s infinite;
+    text-shadow: 0 0 10px rgba(214, 73, 51, 0.8);
+}
+
+@keyframes pulse-magma {
+    0% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(214, 73, 51, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
+}
+
+/* TRACK CREDITS (Sigillo Sonoro) */
+.track-credits {
+    font-size: 0.65rem;
+    color: var(--text-color);
+    opacity: 0.6;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
 footer {
     position: fixed; bottom: 0; left: 0; width: 100%;
     padding: 30px 40px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: flex-end;
     z-index: 20;
     pointer-events: none; 
@@ -94,18 +126,28 @@ footer {
 
 .footer-link {
     color: var(--text-color); text-decoration: none; font-size: 1.1rem;
-    display: flex; align-items: center; gap: 10px;
+    transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
 }
-
 .footer-link:hover { color: var(--accent-color); transform: translateY(-3px); }
 
 .serial-number {
     position: fixed; top: 30px; left: 0; width: 100%; text-align: center;
-    font-size: 0.8rem; opacity: 0.5; letter-spacing: 2px;
+    font-size: 0.8rem; color: var(--text-color); opacity: 0.5; letter-spacing: 2px;
+    z-index: 20; pointer-events: none;
 }
 
 @media (max-width: 768px) {
-    .mobile-only { display: block; }
-    h1.large-chilimangiaro { line-height: 0.85; }
-    footer { flex-direction: column; align-items: center; gap: 20px; padding: 20px; }
+    .mobile-text { display: inline; }
+    .desktop-text { display: none; }
+    
+    h1.large-chilimangiaro { line-height: 0.85; margin-bottom: 15px; }
+    
+    footer {
+        display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;
+        text-align: center;
+    }
+    
+    .footer-link { font-size: 0.9rem; }
+    
+    .volcano-sound-container { bottom: 25vh; }
 }
