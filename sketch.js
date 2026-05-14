@@ -19,14 +19,15 @@ function setup() {
 }
 
 function draw() {
-    background(5); 
+    // Fondo allineato con il CSS: Verde Profondo
+    background('#064f34'); 
     
     flying -= 0.025; 
     let yoff = flying;
 
-    // Coordinate del mouse rispetto al centro
-    let mappedMouseX = mouseX - width / 2;
-    let mappedMouseY = mouseY - height / 2;
+    // Mappatura pura da monitor a griglia per evitare sfalsamenti 3D
+    let mouseGridX = map(mouseX, 0, width, 0, cols);
+    let mouseGridY = map(mouseY, 0, height, rows * 0.1, rows * 0.9); // Compensiamo la prospettiva
 
     for (let y = 0; y < rows; y++) {
         let xoff = 0;
@@ -37,19 +38,18 @@ function draw() {
             let distFromCenter = dist(x, y, centerX, centerY);
             let volcanoEffect = 500 / (1 + pow(distFromCenter * 0.15, 2));
             
-            let actualX = x * scl - w/2;
-            let actualY = y * scl - h/2;
-            
-            // LA NUOVA FISICA: Interazione schiacciata in orizzontale
-            // Moltiplichiamo la Y per "schiacciare" l'area di interazione
-            // Questo crea un'ellisse allungata orizzontalmente
-            let distEllitticaHeight = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
+            // LA NUOVA FISICA: L'Onda Orizzontale Totale
+            // Moltiplicando dx per 0.01 annulliamo l'asse X dal calcolo della distanza.
+            // L'area sensibile diventa una fascia che copre *tutto* lo schermo da sx a dx!
+            let dx = (x - mouseGridX) * 0.01; 
+            let dy = (y - mouseGridY) * 1.2; 
+            let distFascia = sqrt(dx*dx + dy*dy);
             
             let mouseRepulsion = 0;
-            let heightTriggerRadius = 800; // Raggio di base espanso
+            let heightTriggerRadius = 15; // Raggio sulla griglia (ora è un raggio verticale)
             
-            if (distEllitticaHeight < heightTriggerRadius) { 
-                mouseRepulsion = map(distEllitticaHeight, 0, heightTriggerRadius, 250, 0); 
+            if (distFascia < heightTriggerRadius) { 
+                mouseRepulsion = map(distFascia, 0, heightTriggerRadius, 250, 0); 
             }
 
             let noiseVal = noise(xoff, yoff);
@@ -61,7 +61,7 @@ function draw() {
     }
 
     rotateX(PI / 2.6); 
-    rotateZ(frameCount * 0.001); 
+    // Rotazione Z rimossa: era lei a spingere l'area sensibile fuori asse.
     translate(-w / 2, -h / 2);
 
     for (let y = 0; y < rows - 1; y++) {
@@ -69,23 +69,22 @@ function draw() {
         for (let x = 0; x < cols; x++) {
             let z = terrain[x][y];
             
-            let actualX = x * scl - w/2;
-            let actualY = y * scl - h/2;
-            let mappedMouseX = mouseX - width / 2;
-            let mappedMouseY = mouseY - height / 2;
+            let dx = (x - mouseGridX) * 0.01; 
+            let dy = (y - mouseGridY) * 1.2; 
+            let distFasciaColor = sqrt(dx*dx + dy*dy);
             
-            // Stessa logica ellittica per il colore
-            let distEllitticaColor = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
-            let colorTriggerRadius = 900; // Area molto ampia
+            let colorTriggerRadius = 22; // Ampiezza verticale della fascia magmatica
 
-            if (distEllitticaColor < colorTriggerRadius) {
-                let intensity = map(distEllitticaColor, 0, colorTriggerRadius, 255, 120);
-                stroke(214, 73, 51, intensity); // Rosso Magma
-                strokeWeight(map(z, 0, -600, 3, 8)); 
+            if (distFasciaColor < colorTriggerRadius) {
+                // IL MAGMA: L'onda rivelatrice rossa
+                let intensity = map(distFasciaColor, 0, colorTriggerRadius, 255, 60);
+                stroke(214, 73, 51, intensity); 
+                strokeWeight(map(z, 0, -600, 3, 9)); // Punti più carnosi
             } else {
-                // LA PENOMBRA PIU' VISIBILE
-                stroke(150, 40, 30, 180); // Rosso mattone semi-trasparente e più forte
-                strokeWeight(3); // Leggermente più spesso
+                // LA PENOMBRA: Ora molto più visibile e persistente
+                // Un rosso traslucido che crea un contrasto poetico col verde fondo
+                stroke(214, 73, 51, 60); 
+                strokeWeight(3.5); 
             }
             
             vertex(x * scl, y * scl, z);
