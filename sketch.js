@@ -3,69 +3,44 @@ let scl = 30;
 let w, h;
 let flying = 0;
 let terrain = [];
-
-// PARTICELLE DINAMICHE
 let particles = [];
-let numParticles = 150; 
+let numParticles = 180; 
 
 function setup() {
     let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
     canvas.parent('canvas-container');
-    
     w = windowWidth * 1.5;
     h = windowHeight * 1.5;
     cols = floor(w / scl);
     rows = floor(h / scl);
-
-    for (let x = 0; x < cols; x++) {
-        terrain[x] = [];
-    }
-
+    for (let x = 0; x < cols; x++) { terrain[x] = []; }
     resetParticles();
 }
 
 function draw() {
-    clear(); 
+    clear(); // Rende il canvas trasparente per mostrare il verde CSS
     
     flying -= 0.025; 
     let yoff = flying;
-
-    let mouseGridX = map(mouseX, 0, width, 0, cols);
-    let mouseGridY = map(mouseY, 0, height, rows * 0.1, rows * 0.9); 
-    
+    let mappedMouseX = mouseX - width / 2;
+    let mappedMouseY = mouseY - height / 2;
     let amp = window.audioAmplitude || 0;
 
-    // --- GRIGLIA 3D WEBGL ---
     for (let y = 0; y < rows; y++) {
         let xoff = 0;
         for (let x = 0; x < cols; x++) {
-            
             let centerX = cols / 2;
             let centerY = rows / 2;
             let distFromCenter = dist(x, y, centerX, centerY);
-            
-            let baseVolcano = 500;
-            let audioBoost = map(amp, 0, 255, 0, 400); 
-            let volcanoEffect = (baseVolcano + audioBoost) / (1 + pow(distFromCenter * 0.15, 2));
+            let volcanoEffect = (500 + map(amp, 0, 255, 0, 400)) / (1 + pow(distFromCenter * 0.15, 2));
             
             let actualX = x * scl - w/2;
             let actualY = y * scl - h/2;
-            
-            let distEllitticaHeight = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
-            
-            let mouseRepulsion = 0;
-            let heightTriggerRadius = 800; 
+            let distEllittica = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
+            let mouseRepulsion = distEllittica < 800 ? map(distEllittica, 0, 800, 250, 0) : 0;
 
-            if (distEllitticaHeight < heightTriggerRadius) { 
-                mouseRepulsion = map(distEllitticaHeight, 0, heightTriggerRadius, 250, 0); 
-            }
-
-            let jitter = 0;
-            if (amp > 10) { jitter = random(-amp * 0.1, amp * 0.1); }
-
-            let noiseVal = noise(xoff, yoff);
-            terrain[x][y] = map(noiseVal, 0, 1, -50, 50) - volcanoEffect - mouseRepulsion + jitter;
-            
+            let jitter = amp > 10 ? random(-amp * 0.1, amp * 0.1) : 0;
+            terrain[x][y] = map(noise(xoff, yoff), 0, 1, -50, 50) - volcanoEffect - mouseRepulsion + jitter;
             xoff += 0.1;
         }
         yoff += 0.1;
@@ -74,36 +49,26 @@ function draw() {
     rotateX(PI / 2.6); 
     translate(-w / 2, -h / 2);
 
-    // Disegno la Griglia
     for (let y = 0; y < rows - 1; y++) {
         beginShape(POINTS); 
         for (let x = 0; x < cols; x++) {
             let z = terrain[x][y];
-            
             let actualX = x * scl - w/2;
             let actualY = y * scl - h/2;
-            let mappedMouseX = mouseX - width / 2;
-            let mappedMouseY = mouseY - height / 2;
-            
-            let distEllitticaColor = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
-            let colorTriggerRadius = 900; 
+            let distEllitticaColor = sqrt(pow(actualX - (mouseX - width/2), 2) + pow((actualY - (mouseY - height/2)) * 2.5, 2));
 
-            if (distEllitticaColor < colorTriggerRadius) {
-                let extraRed = map(amp, 0, 255, 0, 40);
-                let intensity = map(distEllitticaColor, 0, colorTriggerRadius, 255, 120);
-                stroke(214 + extraRed, 73, 51, intensity); 
+            if (distEllitticaColor < 900) {
+                stroke(214 + map(amp, 0, 255, 0, 41), 73, 51, map(distEllitticaColor, 0, 900, 255, 120));
                 strokeWeight(map(z, 0, -600, 3, 9)); 
             } else {
                 stroke(150, 40, 30, 180); 
                 strokeWeight(3.5); 
             }
-            
             vertex(x * scl, y * scl, z);
         }
         endShape();
     }
 
-    // --- PARTICOLATI DINAMICI (Fix anti-glitch Safari/Webkit) ---
     push();
     translate(w / 2, h / 2); 
     particles.forEach(p => { p.update(amp); p.draw(); });
@@ -116,35 +81,24 @@ class Particle {
         this.x = random(-w / 2, w / 2);
         this.y = random(-h / 2, h / 2);
         this.z = randomZ ? random(-600, 100) : random(-600, -500); 
-        this.size = random(2, 6); // Dimensione visibile
+        this.size = random(2, 5);
         this.velocityX = random(-1, 1);
         this.velocityY = random(-1, 1);
         this.velocityZ = random(1, 3); 
-        this.alpha = random(100, 255);
+        this.alpha = random(150, 255);
     }
     update(amp) {
-        let jitterX = map(amp, 0, 255, 0, 5) * (random() > 0.5 ? 1 : -1);
-        let jitterY = map(amp, 0, 255, 0, 5) * (random() > 0.5 ? 1 : -1);
-        
-        this.x += this.velocityX + jitterX;
-        this.y += this.velocityY + jitterY;
+        this.x += this.velocityX + (map(amp, 0, 255, 0, 5) * (random() > 0.5 ? 1 : -1));
+        this.y += this.velocityY + (map(amp, 0, 255, 0, 5) * (random() > 0.5 ? 1 : -1));
         this.z += this.velocityZ + map(amp, 0, 255, 0, 3); 
-
-        if (this.z > 200) this.init();
-        if (this.x < -w / 2 || this.x > w / 2) this.init();
-        if (this.y < -h / 2 || this.y > h / 2) this.init();
+        if (this.z > 200 || abs(this.x) > w/2 || abs(this.y) > h/2) this.init();
     }
     draw() {
-        let amp = window.audioAmplitude || 0;
-        let redBoost = map(amp, 0, 255, 0, 41); // 214+41 = 255 (Rosso puro)
-        
         push();
         translate(this.x, this.y, this.z);
         noStroke();
-        // Disegniamo veri e propri solidi 3D (sfere) invece di "punti"
-        // Questo aggira per sempre il limite di Safari
-        fill(214 + redBoost, 73, 51, this.alpha);
-        sphere(this.size, 4, 4); // Sfera low-poly, fluida ma visibile!
+        fill(214 + map(window.audioAmplitude || 0, 0, 255, 0, 41), 73, 51, this.alpha);
+        sphere(this.size, 4, 4); // Solidi 3D per massima visibilità
         pop();
     }
 }
@@ -156,10 +110,8 @@ function resetParticles() {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    w = windowWidth * 1.5;
-    h = windowHeight * 1.5;
-    cols = floor(w / scl);
-    rows = floor(h / scl);
+    w = windowWidth * 1.5; h = windowHeight * 1.5;
+    cols = floor(w / scl); rows = floor(h / scl);
     terrain = []; 
     for (let x = 0; x < cols; x++) { terrain[x] = []; }
     resetParticles(); 
