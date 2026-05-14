@@ -14,67 +14,80 @@
    - FIX: Footer allineato e contenuto su Mobile
 */
 
+/* AYE AYE RECORDS - SIGNAL_COMMAND_CSS v27.0
+   - FIX: Beat button CENTRATO su mobile/tablet
+   - FIX: Footer e Navigazione restaurati e visibili
+   - FIX: Overflow-y gestito per piccoli schermi
+*/
+
 :root {
-    --bg-color: #064f34; 
-    --text-color: #FFFFFF; 
-    --accent-color: #D64933; 
+    --neon-yellow: #f0ff00; 
+    --black: #050505;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+body { background-color: var(--black); color: var(--neon-yellow); font-family: 'Space Mono', monospace; height: 100vh; overflow: hidden; }
 
-body { background-color: var(--bg-color) !important; color: var(--text-color); font-family: 'Special Elite', cursive; height: 100vh; overflow: hidden; }
+/* SFONDO */
+#canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+body::after { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.08) 50%); background-size: 100% 4px; z-index: 2; pointer-events: none; }
 
-body::before, .overlay::before { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.15; mix-blend-mode: overlay; z-index: 50; pointer-events: none; }
+/* SBLOCCO INTERAZIONE */
+a, button, .grid-link, .beat-btn, .overlay-close { pointer-events: auto !important; cursor: pointer !important; }
+.main-ui { position: relative; z-index: 10; height: 100%; pointer-events: none; }
 
-#canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+/* HEADER */
+.terminal-header { position: fixed; top: 30px; left: 40px; z-index: 60; pointer-events: auto !important; }
+.logo-text { font-size: clamp(1.8rem, 8vw, 4.2rem); border-bottom: 2px solid var(--neon-yellow); display: inline-block; padding-bottom: 5px; letter-spacing: -2px; }
+.tagline { font-size: 0.8rem; opacity: 0.7; letter-spacing: 2px; }
 
-.desktop-text { display: inline; }
-.mobile-text { display: none; }
+/* NAVIGAZIONE GRID: Desktop */
+.grid-nav { position: fixed; bottom: 130px; left: 40px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+.grid-link { text-decoration: none; color: var(--neon-yellow); font-size: 1.25rem; font-weight: 700; opacity: 0.4; transition: 0.3s; }
+.grid-link:hover { opacity: 1; transform: translateX(8px); text-shadow: 0 0 10px var(--neon-yellow); }
 
-.serial-number { position: fixed; top: 30px; left: 0; width: 100%; text-align: center; font-size: 0.8rem; z-index: 150; cursor: pointer; }
-.serial-number .hover-text { display: none; color: var(--accent-color); font-weight: bold; }
-.serial-number:hover .default-text { display: none; }
-.serial-number:hover .hover-text { display: inline; }
+/* BEAT CONTROL: Desktop (Right Axis) */
+.volcano-sound-container.right-axis { position: fixed; right: 40px; top: 50%; transform: translateY(-50%); z-index: 600 !important; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.beat-btn { padding: 10px 25px; min-width: 170px; background: transparent !important; border: 2px solid var(--neon-yellow) !important; color: var(--neon-yellow) !important; font-family: inherit; font-size: 0.9rem; transition: 0.3s; }
+.beat-btn.playing { animation: pulse 2s infinite; background: rgba(240, 255, 0, 0.1) !important; }
+@keyframes pulse { 50% { box-shadow: 0 0 15px var(--neon-yellow); } }
 
-/* UI CENTRALE */
-.main-ui { position: relative; z-index: 10; text-align: center; pointer-events: none; height: 100vh; display: flex; align-items: center; justify-content: center; }
-h1.large-chilimangiaro { font-size: clamp(2.5rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); }
-.tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
+/* RELEASES & OVERLAYS */
+.overlay-section { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 5, 5, 0.98); z-index: 400; display: none; flex-direction: column; padding: 80px 20px; overflow-y: auto; }
+.overlay-section.active { display: flex; }
+.content-box { max-width: 800px; margin: 0 auto; width: 100%; }
+.overlay-close { position: fixed; top: 20px; right: 20px; color: var(--neon-yellow); font-size: 0.8rem; border: 1px solid var(--neon-yellow); padding: 5px 12px; z-index: 500; background: var(--black); }
 
-/* BOTTONE SUONO */
-.volcano-sound-container { position: fixed; bottom: 20vh; left: 50%; transform: translateX(-50%); z-index: 60; pointer-events: auto; display: flex; flex-direction: column; align-items: center; }
-#magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent !important; border: 2px solid var(--accent-color) !important; color: var(--accent-color) !important; font-family: inherit; font-size: 1rem; cursor: pointer; }
+/* FOOTER */
+footer { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 50; padding: 10px 40px 10px 40px; display: flex; flex-direction: column; gap: 5px; background: rgba(5, 5, 5, 0.9); }
+.footer-top { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; pointer-events: none; }
+.footer-logo { height: 42px; width: auto; opacity: 0.7; }
+.footer-bottom-legal { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--neon-yellow); opacity: 0.3; letter-spacing: 1px; padding-top: 5px; border-top: 1px solid rgba(240, 255, 0, 0.05); }
 
-/* OVERLAY MANIFESTO COMPATTATO */
-.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(6, 79, 52, 0.98); z-index: 200; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.5s; overflow-y: auto; }
-.overlay.active { opacity: 1; visibility: visible; }
-.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 60px 20px; z-index: 210; }
-.overlay-content h2 { color: var(--accent-color); font-size: 2.5rem; margin-bottom: 25px; letter-spacing: 5px; }
-.manifesto-body p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px; }
-.close-manifesto { position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 8px 15px; cursor: pointer; font-size: 0.8rem; z-index: 220; }
-
-/* FOOTER QUADRIPARTITO */
-footer { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 100; }
-.footer-block { flex: 1; pointer-events: auto; }
-.footer-block.mid-left, .footer-block.mid-right { text-align: center; }
-.footer-block.corner-right { text-align: right; }
-.footer-link { color: var(--text-color); text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
-.credits-text { font-size: 0.7rem; color: var(--text-color); opacity: 0.5; }
-
-/* RESPONSIVE MOBILE */
-@media (max-width: 768px) {
-    .desktop-text { display: none; }
-    .mobile-text { display: inline; }
+/* RESPONSIVE: TABLET & SMARTPHONE */
+@media (max-width: 900px) {
+    body { overflow-y: auto; }
     
-    /* Footer mobile: no overflow */
-    footer { position: relative; flex-direction: column; align-items: center; gap: 12px; padding: 30px 10px; background: rgba(0,0,0,0.2); }
-    .footer-block { text-align: center !important; width: 100%; }
-    .footer-link { justify-content: center; font-size: 0.8rem; }
-    
-    /* Manifesto mobile: compatto */
-    .overlay-content h2 { font-size: 1.8rem; }
-    .manifesto-body p { font-size: 0.95rem; line-height: 1.4; margin-bottom: 12px; }
-    
-    .volcano-sound-container { bottom: 25vh; }
-    #magma-sound-btn { min-width: 240px; font-size: 0.9rem; }
+    /* BEAT AL CENTRO */
+    .volcano-sound-container.right-axis {
+        position: fixed; 
+        top: 60%; 
+        left: 50%; 
+        right: auto;
+        transform: translate(-50%, -50%);
+        align-items: center;
+        width: 100%;
+        z-index: 600 !important;
+    }
+    .beat-btn { min-width: 200px; font-size: 1rem; }
+    .track-log { text-align: center; }
+
+    /* NAV IN BASSO SINISTRA */
+    .grid-nav { bottom: 160px; left: 20px; }
+    .grid-link { font-size: 1.1rem; }
+
+    /* FOOTER RESPONSIVE */
+    footer { position: relative; padding: 30px 20px; background: var(--black); }
+    .footer-top { flex-direction: column; align-items: center; gap: 20px; }
+    .footer-bottom-legal { flex-direction: column; align-items: center; gap: 10px; text-align: center; }
 }
