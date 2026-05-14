@@ -18,7 +18,7 @@ function setup() {
 }
 
 function draw() {
-    clear(); // Rende il canvas trasparente per mostrare il verde CSS
+    clear(); 
     
     flying -= 0.025; 
     let yoff = flying;
@@ -36,8 +36,12 @@ function draw() {
             
             let actualX = x * scl - w/2;
             let actualY = y * scl - h/2;
-            let distEllittica = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
-            let mouseRepulsion = distEllittica < 800 ? map(distEllittica, 0, 800, 250, 0) : 0;
+            
+            // ONDA SISMICA POTENZIATA E AMPIAMENTE ELLITTICA
+            let distEllittica = sqrt(pow((actualX - mappedMouseX) * 0.4, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
+            
+            // Forza di sollevamento incrementata (da 250 a 450)
+            let mouseRepulsion = distEllittica < 800 ? map(distEllittica, 0, 800, 450, 0) : 0;
 
             let jitter = amp > 10 ? random(-amp * 0.1, amp * 0.1) : 0;
             terrain[x][y] = map(noise(xoff, yoff), 0, 1, -50, 50) - volcanoEffect - mouseRepulsion + jitter;
@@ -55,7 +59,7 @@ function draw() {
             let z = terrain[x][y];
             let actualX = x * scl - w/2;
             let actualY = y * scl - h/2;
-            let distEllitticaColor = sqrt(pow(actualX - (mouseX - width/2), 2) + pow((actualY - (mouseY - height/2)) * 2.5, 2));
+            let distEllitticaColor = sqrt(pow((actualX - (mouseX - width/2)) * 0.4, 2) + pow((actualY - (mouseY - height/2)) * 2.5, 2));
 
             if (distEllitticaColor < 900) {
                 stroke(214 + map(amp, 0, 255, 0, 41), 73, 51, map(distEllitticaColor, 0, 900, 255, 120));
@@ -69,6 +73,7 @@ function draw() {
         endShape();
     }
 
+    // Particolati Magmatici ("Lapilli")
     push();
     translate(w / 2, h / 2); 
     particles.forEach(p => { p.update(amp); p.draw(); });
@@ -98,7 +103,7 @@ class Particle {
         translate(this.x, this.y, this.z);
         noStroke();
         fill(214 + map(window.audioAmplitude || 0, 0, 255, 0, 41), 73, 51, this.alpha);
-        sphere(this.size, 4, 4); // Solidi 3D per massima visibilità
+        sphere(this.size, 4, 4); 
         pop();
     }
 }
