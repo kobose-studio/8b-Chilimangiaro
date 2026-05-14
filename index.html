@@ -100,19 +100,4 @@
 
         function toggleMagmaSound() {
             initAudio(); 
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-            if (isPlaying) {
-                magmaAudio.pause();
-                soundBtn.innerText = "VOLCANO SOUND: OFF";
-                soundBtn.classList.remove('playing');
-            } else {
-                magmaAudio.play().catch(e => console.log("Segnale bloccato."));
-                soundBtn.innerText = "VOLCANO SOUND: ON";
-                soundBtn.classList.add('playing');
-            }
-            isPlaying = !isPlaying;
-        }
-    </script>
-    <script src="sketch.js"></script>
-</body>
-</html>
+            if (audio
