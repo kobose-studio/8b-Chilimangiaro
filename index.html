@@ -27,6 +27,17 @@
         </div>
     </main>
 
+    <div class="volcano-sound-container">
+        <div class="audio-wrapper" onclick="toggleMagmaSound()">
+            <div id="visualizer" class="audio-control">
+                <span class="bar" style="animation-delay: 0.1s"></span>
+                <span class="bar" style="animation-delay: 0.3s"></span>
+                <span class="bar" style="animation-delay: 0.2s"></span>
+            </div>
+            <span id="audio-label" class="audio-status-label">VOLCANO OFF</span>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-block left">
             <a href="mailto:chilimangiaroband@gmail.com" target="_blank" class="footer-link mail-link">
@@ -36,15 +47,7 @@
         </div>
 
         <div class="footer-block center">
-            <div class="audio-wrapper" onclick="toggleMagmaSound()">
-                <div id="visualizer" class="audio-control">
-                    <span class="bar" style="animation-delay: 0.1s"></span>
-                    <span class="bar" style="animation-delay: 0.3s"></span>
-                    <span class="bar" style="animation-delay: 0.2s"></span>
-                </div>
-                <span id="audio-label" class="audio-status-label">MAGMA OFF</span>
             </div>
-        </div>
 
         <div class="footer-block right">
             <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
@@ -55,7 +58,7 @@
     </footer>
 
     <audio id="magma-audio" loop preload="auto" crossorigin="anonymous">
-        <source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_60sec.mp3" type="audio/mpeg">
+        <source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_25sec.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -64,17 +67,15 @@
         let audioLabel = document.getElementById('audio-label');
         let isPlaying = false;
 
-        // ALCHIMIA AUDIO: Analizzatore di Frequenze Web Audio API
-        window.audioAmplitude = 0; // Variabile globale che p5.js leggerà
+        window.audioAmplitude = 0; 
         let audioCtx, analyser, source, dataArray;
 
         function initAudio() {
             if (!audioCtx) {
-                // Inizializza il motore sonoro al primo click dell'utente
                 let AudioContext = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContext();
                 analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 256; // Risoluzione frequenze
+                analyser.fftSize = 256; 
                 
                 source = audioCtx.createMediaElementSource(magmaAudio);
                 source.connect(analyser);
@@ -82,14 +83,13 @@
                 
                 dataArray = new Uint8Array(analyser.frequencyBinCount);
                 
-                // Funzione che aggiorna il volume globale a ogni frame
                 function updateAmplitude() {
                     requestAnimationFrame(updateAmplitude);
                     if (isPlaying) {
                         analyser.getByteFrequencyData(dataArray);
                         let sum = 0;
                         for(let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
-                        window.audioAmplitude = sum / dataArray.length; // Media del volume
+                        window.audioAmplitude = sum / dataArray.length; 
                     } else {
                         window.audioAmplitude = 0;
                     }
@@ -99,24 +99,21 @@
         }
 
         function toggleMagmaSound() {
-            initAudio(); // Richiama il setup
+            initAudio(); 
             
-            // Riattiva il contesto se sospeso dal browser
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
 
             if (isPlaying) {
                 magmaAudio.pause();
-                audioLabel.innerText = "MAGMA OFF";
+                audioLabel.innerText = "VOLCANO OFF";
                 visualizer.classList.remove('playing');
             } else {
                 magmaAudio.play().catch(e => console.log("L'eco è bloccato.", e));
-                audioLabel.innerText = "MAGMA ON";
+                audioLabel.innerText = "VOLCANO ON";
                 visualizer.classList.add('playing');
             }
             isPlaying = !isPlaying;
         }
     </script>
-
-    <script src="sketch.js"></script>
 </body>
 </html>
