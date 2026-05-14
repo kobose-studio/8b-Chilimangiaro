@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>8B & I CHILIMANGIARO | Magma Roots Ensemble</title>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
@@ -40,18 +41,32 @@
     </div>
 
     <footer>
-        <div class="credits-line">© CHILIMANGIARO 2026 // artwork + web | <a href="http://kobose.it" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid currentColor;">kobose</a></div>
+        <div class="footer-block left">
+            <a href="mailto:info@chilimangiaro.com" target="_blank" class="footer-link">
+                <i class="fa-regular fa-envelope"></i>
+                <span>Booking | info@chilimangiaro.com</span>
+            </a>
+        </div>
+        
+        <div class="footer-block center">
+            <span class="credits-line">© 8B & I CHILIMANGIARO 2026 &nbsp;|&nbsp; ART/DESIGN • <a href="http://kobose.it" target="_blank">KOBOSE</a></span>
+        </div>
+
+        <div class="footer-block right">
+            <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
+                <span>Instagram</span>
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
     </footer>
 
     <audio id="magma-audio" loop preload="auto"><source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_25sec.mp3" type="audio/mpeg"></audio>
     
     <script>
-        // Gestione Sottopagina
         function toggleManifesto() { 
             document.getElementById('manifesto-overlay').classList.toggle('active'); 
         }
         
-        // Gestione Audio
         let magmaAudio = document.getElementById('magma-audio');
         let soundBtn = document.getElementById('magma-sound-btn');
         let isPlaying = false;
