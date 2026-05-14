@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>8B & I CHILIMANGIARO | Magma Roots Ensemble</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=9.0">
+    <link rel="stylesheet" href="style.css?v=10.0">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
 <body>
+
     <div class="serial-number manifesto-trigger" onclick="toggleManifesto()">
         <span class="default-text">8B & I CHILIMANGIARO</span>
         <span class="hover-text">I CHILIMANGIARO: IL MANIFESTO</span>
@@ -47,27 +53,87 @@
     </div>
 
     <footer>
-        <div class="footer-block left">
+        <div class="footer-block corner-left">
             <a href="mailto:info@chilimangiaro.com" target="_blank" class="footer-link">
                 <i class="fa-regular fa-envelope"></i>
-                <span>Booking | info@chilimangiaro.com</span>
+                <span>Booking | info@ayeayerecords.com</span>
             </a>
         </div>
-        <div class="footer-block center">
-            <div class="credits-line">
-                © CHILIMANGIARO 2026 // artwork + web | <a href="http://kobose.it" target="_blank">kobose</a>
-            </div>
+
+        <div class="footer-block mid-left">
+            <span class="credits-text">© CHILIMANGIARO 2026</span>
         </div>
-        <div class="footer-block right">
+
+        <div class="footer-block mid-right">
+            <span class="credits-text">artwork + web | <a href="http://kobose.it" target="_blank">kobose</a></span>
+        </div>
+
+        <div class="footer-block corner-right">
             <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
                 <span>Instagram</span>
                 <i class="fa-brands fa-instagram"></i>
             </a>
         </div>
     </footer>
+
+    <audio id="magma-audio" loop preload="auto" crossorigin="anonymous">
+        <source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_25sec.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        function toggleManifesto() { document.getElementById('manifesto-overlay').classList.toggle('active'); }
-        // ... altre funzioni audio esistenti ...
+        let magmaAudio = document.getElementById('magma-audio');
+        let soundBtn = document.getElementById('magma-sound-btn');
+        let trackInfo = document.getElementById('track-info');
+        let manifesto = document.getElementById('manifesto-overlay');
+        let isPlaying = false;
+
+        window.audioAmplitude = 0; 
+        let audioCtx, analyser, source, dataArray;
+
+        function toggleManifesto() {
+            manifesto.classList.toggle('active');
+        }
+
+        function initAudio() {
+            if (!audioCtx) {
+                let AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256; 
+                source = audioCtx.createMediaElementSource(magmaAudio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                
+                function updateAmplitude() {
+                    requestAnimationFrame(updateAmplitude);
+                    if (isPlaying) {
+                        analyser.getByteFrequencyData(dataArray);
+                        let sum = 0;
+                        for(let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
+                        window.audioAmplitude = sum / dataArray.length; 
+                    } else { window.audioAmplitude = 0; }
+                }
+                updateAmplitude();
+            }
+        }
+
+        function toggleMagmaSound() {
+            initAudio(); 
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            if (isPlaying) {
+                magmaAudio.pause();
+                soundBtn.innerText = "VOLCANO SOUND: OFF";
+                soundBtn.classList.remove('playing');
+                trackInfo.classList.remove('active');
+            } else {
+                magmaAudio.play().catch(e => console.log("Segnale bloccato."));
+                soundBtn.innerText = "VOLCANO SOUND: ON";
+                soundBtn.classList.add('playing');
+                trackInfo.classList.add('active');
+            }
+            isPlaying = !isPlaying;
+        }
     </script>
     <script src="sketch.js"></script>
 </body>
