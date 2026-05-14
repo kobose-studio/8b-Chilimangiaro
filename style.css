@@ -1,8 +1,9 @@
 /* SETUP & CROMIE (Ispirate al Logo) */
 :root {
     --bg-color: #F2E8CF; /* Crema Vintage / Carta */
-    --text-color: #2B2D42; /* Antracite profondo */
-    --accent-color: #D64933; /* Arancio Vulcano */
+    --text-color: #2B2D42; /* Antracite profondo / Dark Green */
+    --accent-color: #D64933; /* Arancio-Rosso Vulcano */
+    --points-default: #0d2818; /* Verde scuro per i punti */
 }
 
 * {
@@ -12,7 +13,7 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--bg-color); /* Sfondo crema vintage globale */
     color: var(--text-color);
     font-family: 'Special Elite', cursive;
     height: 100vh;
@@ -30,8 +31,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
-    mix-blend-mode: multiply; 
+    z-index: 1; /* Punti in fondo, dietro a tutto */
+    /* mix-blend-mode: multiply; Non serve mix-blend-mode su fondo nero, 
+       ma lo lascio per integrare con il color crema vintage, proviamo */
+    /*mix-blend-mode: multiply;*/
     opacity: 0.8;
 }
 
@@ -43,12 +46,30 @@ body {
     pointer-events: none; /* Lascia passare il click del mouse verso il canvas */
 }
 
-h1 {
+/* CENTRAL STACK PER LOGO E TESTO */
+.central-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Distanza tra elementi */
+}
+
+/* IL TRUCCO ALCHEMICO: mix-blend-mode farà sparire lo sfondo crema dell'immagine! */
+.main-logo {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    mix-blend-mode: multiply; /* Fonde l'inchiostro del logo direttamente col background vintage! */
+    filter: contrast(1.1);
+}
+
+h1.large-chilimangiaro {
     font-size: clamp(2rem, 8vw, 4.5rem);
     line-height: 1.1;
     margin-bottom: 0.5rem;
     letter-spacing: -1px;
-    color: var(--text-color);
+    color: var(--accent-color); /* GRANDE E ROSSO! */
 }
 
 .tagline {
@@ -86,7 +107,7 @@ footer {
 }
 
 .footer-link:hover {
-    color: var(--accent-color); /* Hover arancio lava */
+    color: var(--accent-color); /* Hover arancio-rosso vulcano */
     transform: translateY(-3px);
 }
 
@@ -107,6 +128,7 @@ footer {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+    .main-logo { max-width: 280px; }
     footer {
         flex-direction: column;
         align-items: center;
