@@ -19,9 +19,9 @@ function setup() {
 }
 
 function draw() {
-    // FIX COLORE: RGB puro per forzare il WebGL a renderizzare il #064f34
-    // R: 6, G: 79, B: 52
-    background(6, 79, 52); 
+    // LA SOLUZIONE: clear() rende il canvas trasparente.
+    // Ora il background color #064f34 del CSS sarà visibile!
+    clear(); 
     
     flying -= 0.025; 
     let yoff = flying;
