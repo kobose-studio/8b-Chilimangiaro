@@ -28,21 +28,14 @@
     </main>
 
     <div class="volcano-sound-container">
-        <div class="audio-wrapper" onclick="toggleMagmaSound()">
-            <div id="visualizer" class="audio-control">
-                <span class="bar" style="animation-delay: 0.1s"></span>
-                <span class="bar" style="animation-delay: 0.3s"></span>
-                <span class="bar" style="animation-delay: 0.2s"></span>
-            </div>
-            <span id="audio-label" class="audio-status-label">VOLCANO OFF</span>
-        </div>
+        <button id="magma-sound-btn" onclick="toggleMagmaSound()">VOLCANO SOUND: OFF</button>
     </div>
 
     <footer>
         <div class="footer-block left">
-            <a href="mailto:chilimangiaroband@gmail.com" target="_blank" class="footer-link mail-link">
+            <a href="mailto:info@chilimangiaro.com" target="_blank" class="footer-link mail-link">
                 <i class="fa-regular fa-envelope"></i>
-                <span>mail @chilimangiaro</span>
+                <span>Greeting & Booking | info@chilimangiaro.com</span>
             </a>
         </div>
 
@@ -63,8 +56,7 @@
 
     <script>
         let magmaAudio = document.getElementById('magma-audio');
-        let visualizer = document.getElementById('visualizer');
-        let audioLabel = document.getElementById('audio-label');
+        let soundBtn = document.getElementById('magma-sound-btn');
         let isPlaying = false;
 
         window.audioAmplitude = 0; 
@@ -105,12 +97,12 @@
 
             if (isPlaying) {
                 magmaAudio.pause();
-                audioLabel.innerText = "VOLCANO OFF";
-                visualizer.classList.remove('playing');
+                soundBtn.innerText = "VOLCANO SOUND: OFF";
+                soundBtn.classList.remove('playing');
             } else {
                 magmaAudio.play().catch(e => console.log("L'eco è bloccato.", e));
-                audioLabel.innerText = "VOLCANO ON";
-                visualizer.classList.add('playing');
+                soundBtn.innerText = "VOLCANO SOUND: ON";
+                soundBtn.classList.add('playing');
             }
             isPlaying = !isPlaying;
         }
