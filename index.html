@@ -10,8 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css?v=5.0">
+    <link rel="stylesheet" href="style.css?v=6.0">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
@@ -23,13 +22,17 @@
 
     <main class="main-ui">
         <div class="central-stack">
-            <h1 class="large-chilimangiaro">CHILI<br class="mobile-only">MANGIARO</h1>
+            <h1 class="large-chilimangiaro">
+                <span class="desktop-text">CHILIMANGIARO</span>
+                <span class="mobile-text">CHILI<br>MANGIARO</span>
+            </h1>
             <div class="tagline">- MAGMA ROOTS ENSEMBLE -</div>
         </div>
     </main>
 
     <div class="volcano-sound-container">
         <button id="magma-sound-btn" onclick="toggleMagmaSound()">VOLCANO SOUND: OFF</button>
+        <div class="track-credits">Track: LOVEWELL - 8B & I CHILIMANGIARO</div>
     </div>
 
     <footer>
@@ -101,7 +104,6 @@
             isPlaying = !isPlaying;
         }
     </script>
-    
-    <script src="sketch.js?v=5.0"></script>
+    <script src="sketch.js?v=6.0"></script>
 </body>
 </html>
