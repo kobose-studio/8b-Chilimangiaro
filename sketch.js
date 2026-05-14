@@ -37,10 +37,7 @@ function draw() {
             let actualX = x * scl - w/2;
             let actualY = y * scl - h/2;
             
-            // ONDA SISMICA POTENZIATA E AMPIAMENTE ELLITTICA
             let distEllittica = sqrt(pow((actualX - mappedMouseX) * 0.4, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
-            
-            // Forza di sollevamento incrementata (da 250 a 450)
             let mouseRepulsion = distEllittica < 800 ? map(distEllittica, 0, 800, 450, 0) : 0;
 
             let jitter = amp > 10 ? random(-amp * 0.1, amp * 0.1) : 0;
@@ -73,7 +70,6 @@ function draw() {
         endShape();
     }
 
-    // Particolati Magmatici ("Lapilli")
     push();
     translate(w / 2, h / 2); 
     particles.forEach(p => { p.update(amp); p.draw(); });
