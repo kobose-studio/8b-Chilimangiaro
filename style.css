@@ -1,9 +1,8 @@
-/* SETUP & CROMIE (Ispirate al Logo) */
+/* SETUP & CROMIE: Il Vuoto e l'Eruzione */
 :root {
-    --bg-color: #F2E8CF; /* Crema Vintage / Carta */
-    --text-color: #2B2D42; /* Antracite profondo / Dark Green */
-    --accent-color: #D64933; /* Arancio-Rosso Vulcano */
-    --points-default: #0d2818; /* Verde scuro per i punti */
+    --bg-color: #050505; /* Ho scurito anche il fondo globale per allinearlo al canvas */
+    --text-color: #FFFFFF; /* Testi in bianco puro, massima leggibilità */
+    --accent-color: #D64933; /* Arancio-Rosso Vulcano per il Titolo */
 }
 
 * {
@@ -13,29 +12,25 @@
 }
 
 body {
-    background-color: var(--bg-color); /* Sfondo crema vintage globale */
+    background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'Special Elite', cursive;
     height: 100vh;
-    overflow: hidden; /* Niente scroll, è un'installazione fissa */
+    overflow: hidden; /* Blocchiamo l'asse Y, è un'installazione visiva */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* CANVAS BACKGROUND: Miscelato col fondo vintage */
+/* CANVAS BACKGROUND: Il terreno generativo */
 #canvas-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Punti in fondo, dietro a tutto */
-    /* mix-blend-mode: multiply; Non serve mix-blend-mode su fondo nero, 
-       ma lo lascio per integrare con il color crema vintage, proviamo */
-    /*mix-blend-mode: multiply;*/
-    opacity: 0.8;
+    z-index: 1; /* Il codice gira in background */
 }
 
 /* INTERFACCIA CENTRALE */
@@ -43,41 +38,45 @@ body {
     position: relative;
     z-index: 10;
     text-align: center;
-    pointer-events: none; /* Lascia passare il click del mouse verso il canvas */
+    pointer-events: none; /* Lascia che il mouse "buchi" il div per interagire coi punti */
 }
 
-/* CENTRAL STACK PER LOGO E TESTO */
+/* CENTRAL STACK */
 .central-stack {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Distanza tra elementi */
+    gap: 10px;
 }
 
-/* IL TRUCCO ALCHEMICO: mix-blend-mode farà sparire lo sfondo crema dell'immagine! */
+/* IL LOGO (se deciderai di caricarlo su GitHub come logo.jpg) */
 .main-logo {
     width: 100%;
     max-width: 450px;
     height: auto;
-    mix-blend-mode: multiply; /* Fonde l'inchiostro del logo direttamente col background vintage! */
+    /* Se lo sfondo del logo è chiaro, manteniamo il multiply, 
+       altrimenti se vuoi un logo normale rimuovi la riga seguente */
+    mix-blend-mode: multiply; 
     filter: contrast(1.1);
 }
 
+/* TITOLO PRINCIPALE: Rosso Magma */
 h1.large-chilimangiaro {
     font-size: clamp(2rem, 8vw, 4.5rem);
     line-height: 1.1;
     margin-bottom: 0.5rem;
     letter-spacing: -1px;
-    color: var(--accent-color); /* GRANDE E ROSSO! */
+    color: var(--accent-color); /* Colore rosso vulcano applicato */
 }
 
+/* TAGLINE: Bianca e senza righe */
 .tagline {
     font-size: 1.2rem;
     text-transform: uppercase;
     letter-spacing: 3px;
-    border-top: 1px solid var(--text-color);
-    border-bottom: 1px solid var(--text-color);
+    color: var(--text-color); /* Bianco */
+    /* Linee di demarcazione (border-top e bottom) rimosse con successo */
     padding: 5px 20px;
     display: inline-block;
 }
@@ -93,11 +92,11 @@ footer {
     justify-content: space-between;
     align-items: flex-end;
     z-index: 20;
-    pointer-events: auto; /* Riattiva i click per i link */
+    pointer-events: auto; /* Riattiva i click per la Mail e Instagram */
 }
 
 .footer-link {
-    color: var(--text-color);
+    color: var(--text-color); /* Bianco */
     text-decoration: none;
     font-size: 1.1rem;
     transition: all 0.3s ease;
@@ -107,7 +106,7 @@ footer {
 }
 
 .footer-link:hover {
-    color: var(--accent-color); /* Hover arancio-rosso vulcano */
+    color: var(--accent-color); /* Hover rosso vulcano */
     transform: translateY(-3px);
 }
 
@@ -121,6 +120,7 @@ footer {
     top: 30px;
     left: 40px;
     font-size: 0.8rem;
+    color: var(--text-color); /* Bianco */
     opacity: 0.5;
     letter-spacing: 2px;
     z-index: 20;
