@@ -14,7 +14,7 @@ body {
     overflow: hidden; 
 }
 
-/* TEXTURE NOISE GLOBALE E SULLA SOTTOPAGINA */
+/* TEXTURE NOISE GLOBALE */
 body::before, .overlay::before { 
     content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
@@ -28,21 +28,39 @@ body::before, .overlay::before {
 h1.large-chilimangiaro { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); margin-bottom: 0; }
 .tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
 
-/* TRIGGER MANIFESTO (Il bottone in alto) */
+/* TRIGGER MANIFESTO IN ALTO */
 .serial-number { 
     position: fixed; top: 30px; left: 0; width: 100%; text-align: center; 
     font-size: 0.8rem; letter-spacing: 2px; z-index: 150; cursor: pointer; 
     transition: 0.3s; pointer-events: auto; 
 }
-.serial-number:hover { color: var(--accent-color); }
+.serial-number:hover { color: var(--accent-color); text-shadow: 0 0 10px rgba(214, 73, 51, 0.5); }
 
 /* BOTTONE SUONO VULCANO */
-.volcano-sound-container { position: fixed; bottom: 20vh; left: 50%; transform: translateX(-50%); z-index: 60; pointer-events: auto; }
+.volcano-sound-container { position: fixed; bottom: 25vh; left: 50%; transform: translateX(-50%); z-index: 60; pointer-events: auto; }
 #magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; }
 #magma-sound-btn:hover, #magma-sound-btn.playing { background-color: rgba(214, 73, 51, 0.15); box-shadow: 0 0 20px rgba(214, 73, 51, 0.5); }
 
-/* FOOTER VECCHIO (Semplice) */
-footer { position: fixed; bottom: 20px; width: 100%; text-align: center; font-size: 0.75rem; opacity: 0.6; z-index: 100; pointer-events: auto; }
+/* FOOTER A 3 BLOCCHI */
+footer { 
+    position: fixed; bottom: 20px; left: 0; width: 100%; 
+    padding: 0 40px; display: flex; justify-content: space-between; 
+    align-items: center; z-index: 100; pointer-events: none; 
+}
+.footer-block { flex: 1; pointer-events: auto; }
+.footer-block.left { text-align: left; }
+.footer-block.center { text-align: center; }
+.footer-block.right { text-align: right; display: flex; justify-content: flex-end; }
+
+.footer-link { 
+    color: var(--text-color); text-decoration: none; font-size: 0.85rem; 
+    display: flex; align-items: center; gap: 8px; opacity: 0.6; transition: 0.3s; 
+}
+.footer-link:hover { color: var(--accent-color); opacity: 1; }
+
+.credits-line { font-size: 0.75rem; opacity: 0.6; letter-spacing: 1px; }
+.credits-line a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; transition: 0.3s; }
+.credits-line a:hover { color: var(--accent-color); border-color: var(--accent-color); }
 
 /* OVERLAY SOTTOPAGINA MANIFESTO */
 .overlay { 
@@ -68,9 +86,23 @@ footer { position: fixed; bottom: 20px; width: 100%; text-align: center; font-si
 /* RESPONSIVE SMARTPHONE */
 @media (max-width: 768px) {
     h1.large-chilimangiaro { font-size: 3.5rem; line-height: 1; margin-bottom: 10px; }
-    .volcano-sound-container { bottom: 25vh; }
+    
+    /* Footer Mobile - Incolonnato per evitare overflow */
+    footer { 
+        position: relative; bottom: auto; padding: 30px 20px; 
+        flex-direction: column; gap: 15px; background: rgba(0,0,0,0.15); 
+        margin-top: 40px; 
+    }
+    .footer-block { text-align: center; width: 100%; }
+    .footer-block.right { justify-content: center; }
+    .footer-link { justify-content: center; }
+    
+    .volcano-sound-container { position: relative; bottom: auto; margin-top: 40px; }
     #magma-sound-btn { min-width: 240px; }
+    
     .overlay-content h2 { font-size: 1.8rem; }
     .manifesto-body p { font-size: 0.95rem; }
     .close-manifesto { top: 20px; right: 20px; padding: 8px 15px; }
+    
+    body { overflow-y: auto; }
 }
