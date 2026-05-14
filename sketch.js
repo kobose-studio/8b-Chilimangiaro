@@ -13,15 +13,13 @@ function setup() {
     cols = floor(w / scl);
     rows = floor(h / scl);
 
-    // Inizializzazione della matrice del terreno
     for (let x = 0; x < cols; x++) {
         terrain[x] = [];
     }
 }
 
 function draw() {
-    // L'INTUIZIONE ALCHEMICA DI SEB:
-    // clear() rende il canvas trasparente, lasciando emergere il verde #064f34 dal CSS!
+    // clear() rende il canvas trasparente, svelando il verde #064f34 dal CSS
     clear(); 
     
     flying -= 0.025; 
@@ -87,20 +85,17 @@ function draw() {
     }
 }
 
-// IL FIX DELLA MATRICE
+// IL FIX DELLA MATRICE (Evita la scomparsa dei punti al resize)
 function windowResized() {
-    // 1. Ridimensioniamo il canvas visivo
     resizeCanvas(windowWidth, windowHeight);
     
-    // 2. Ricalcoliamo l'ampiezza virtuale
     w = windowWidth * 1.5;
     h = windowHeight * 1.5;
     cols = floor(w / scl);
     rows = floor(h / scl);
 
-    // 3. LA CURA: Dobbiamo rigenerare l'array 'terrain' per le nuove dimensioni!
-    terrain = []; // Svuotiamo la vecchia memoria
+    terrain = []; 
     for (let x = 0; x < cols; x++) {
-        terrain[x] = []; // Creiamo i nuovi spazi per evitare il crash
+        terrain[x] = []; 
     }
 }
