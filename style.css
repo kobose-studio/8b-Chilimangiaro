@@ -1,4 +1,4 @@
-:root {
+:root { 
     --bg-color: #064f34; 
     --text-color: #FFFFFF; 
     --accent-color: #D64933; 
@@ -6,151 +6,71 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.15; 
-    mix-blend-mode: overlay;
-    z-index: 50; 
-    pointer-events: none; 
+body { 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    font-family: 'Special Elite', cursive; 
+    height: 100vh; 
+    overflow: hidden; 
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Special Elite', cursive;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+/* TEXTURE NOISE GLOBALE E SULLA SOTTOPAGINA */
+body::before, .overlay::before { 
+    content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+    opacity: 0.15; mix-blend-mode: overlay; z-index: 50; pointer-events: none; 
 }
 
-#canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+#canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-.main-ui { position: relative; z-index: 10; text-align: center; pointer-events: none; }
+/* UI CENTRALE */
+.main-ui { position: relative; z-index: 10; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; pointer-events: none; }
+h1.large-chilimangiaro { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); margin-bottom: 0; }
+.tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
 
-.central-stack { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; }
-
-h1.large-chilimangiaro {
-    font-size: clamp(3rem, 10vw, 6rem);
-    line-height: 1;
-    margin-bottom: 0;
-    letter-spacing: 2px;
-    color: var(--accent-color);
-    text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); 
+/* TRIGGER MANIFESTO (Il bottone in alto) */
+.serial-number { 
+    position: fixed; top: 30px; left: 0; width: 100%; text-align: center; 
+    font-size: 0.8rem; letter-spacing: 2px; z-index: 150; cursor: pointer; 
+    transition: 0.3s; pointer-events: auto; 
 }
+.serial-number:hover { color: var(--accent-color); }
 
-.tagline {
-    font-size: 1rem; 
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--text-color);
-    padding: 10px 20px;
-    display: inline-block;
-    line-height: 1.4;
+/* BOTTONE SUONO VULCANO */
+.volcano-sound-container { position: fixed; bottom: 20vh; left: 50%; transform: translateX(-50%); z-index: 60; pointer-events: auto; }
+#magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+#magma-sound-btn:hover, #magma-sound-btn.playing { background-color: rgba(214, 73, 51, 0.15); box-shadow: 0 0 20px rgba(214, 73, 51, 0.5); }
+
+/* FOOTER VECCHIO (Semplice) */
+footer { position: fixed; bottom: 20px; width: 100%; text-align: center; font-size: 0.75rem; opacity: 0.6; z-index: 100; pointer-events: auto; }
+
+/* OVERLAY SOTTOPAGINA MANIFESTO */
+.overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background-color: rgba(6, 79, 52, 0.98); z-index: 200; 
+    display: none; justify-content: center; align-items: center; 
+    overflow-y: auto; pointer-events: auto; 
 }
-
-.mobile-text { display: none; }
-.desktop-text { display: inline; }
-
-.volcano-sound-container {
-    position: fixed;
-    bottom: 20vh; 
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    pointer-events: auto; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.overlay.active { display: flex; }
+.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 40px 20px; z-index: 210; margin: auto; }
+.overlay-content h2 { color: var(--accent-color); font-size: 2.5rem; margin-bottom: 25px; letter-spacing: 5px; }
+.manifesto-body p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
+.m-highlight { font-weight: bold; color: var(--accent-color); text-transform: uppercase; }
+.m-footer { margin-top: 40px; font-style: italic; opacity: 0.8; }
+.close-manifesto { 
+    position: fixed; top: 30px; right: 40px; background: transparent; 
+    border: 1px solid var(--text-color); color: var(--text-color); 
+    padding: 10px 20px; cursor: pointer; font-family: inherit; 
+    z-index: 220; transition: 0.3s; 
 }
+.close-manifesto:hover { color: var(--accent-color); border-color: var(--accent-color); }
 
-/* BOTTONE CON FRAME FISSO */
-#magma-sound-btn {
-    padding: 12px 30px;
-    min-width: 280px; /* DIMENSIONE FISSA: Impedisce il sussulto del frame */
-    background-color: transparent !important;
-    border: 2px solid var(--accent-color) !important;
-    color: var(--accent-color) !important;
-    font-family: 'Special Elite', cursive !important;
-    font-size: 1rem;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    border-radius: 0 !important;
-    outline: none;
-}
-
-#magma-sound-btn:hover, #magma-sound-btn.playing {
-    background-color: rgba(214, 73, 51, 0.15) !important;
-    box-shadow: 0 0 20px rgba(214, 73, 51, 0.5);
-}
-
-#magma-sound-btn.playing {
-    animation: pulse-magma 2s infinite;
-    text-shadow: 0 0 10px rgba(214, 73, 51, 0.8);
-}
-
-@keyframes pulse-magma {
-    0% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
-    50% { box-shadow: 0 0 25px rgba(214, 73, 51, 0.6); }
-    100% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
-}
-
-/* TRACK CREDITS CON OPACITY DINAMICA */
-.track-credits {
-    font-size: 0.65rem;
-    color: var(--text-color);
-    opacity: 0.15; /* PENOMBRA INIZIALE */
-    margin-top: 15px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-align: center;
-    transition: opacity 0.8s ease; /* Transizione fluida */
-}
-
-.track-credits.active {
-    opacity: 1; /* LUCE PURA ALL'ATTIVAZIONE */
-}
-
-footer {
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    padding: 30px 40px;
-    display: flex;
-    justify-content: space-between; 
-    align-items: flex-end;
-    z-index: 20;
-    pointer-events: none; 
-}
-
-.footer-block { pointer-events: auto; }
-
-.footer-link {
-    color: var(--text-color); text-decoration: none; font-size: 1.1rem;
-    transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
-}
-.footer-link:hover { color: var(--accent-color); transform: translateY(-3px); }
-
-.serial-number {
-    position: fixed; top: 30px; left: 0; width: 100%; text-align: center;
-    font-size: 0.8rem; color: var(--text-color); opacity: 0.5; letter-spacing: 2px;
-    z-index: 20; pointer-events: none;
-}
-
+/* RESPONSIVE SMARTPHONE */
 @media (max-width: 768px) {
-    .mobile-text { display: inline; }
-    .desktop-text { display: none; }
-    h1.large-chilimangiaro { line-height: 0.85; margin-bottom: 15px; }
-    footer {
-        display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;
-        text-align: center;
-    }
-    .footer-link { font-size: 0.9rem; }
+    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 1; margin-bottom: 10px; }
     .volcano-sound-container { bottom: 25vh; }
-    #magma-sound-btn { min-width: 240px; } /* Leggermente più piccolo su mobile */
+    #magma-sound-btn { min-width: 240px; }
+    .overlay-content h2 { font-size: 1.8rem; }
+    .manifesto-body p { font-size: 0.95rem; }
+    .close-manifesto { top: 20px; right: 20px; padding: 8px 15px; }
 }
