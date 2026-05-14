@@ -1,5 +1,5 @@
 let cols, rows;
-let scl = 30; // Risoluzione della griglia
+let scl = 30; 
 let w, h;
 let flying = 0;
 let terrain = [];
@@ -19,12 +19,12 @@ function setup() {
 }
 
 function draw() {
-    background(5); // Nero assoluto
+    background(5); 
     
-    flying -= 0.025; // Velocità della lava
+    flying -= 0.025; 
     let yoff = flying;
 
-    // Fix Matematico: Allineamento Mouse 2D a Spazio 3D
+    // Coordinate del mouse rispetto al centro
     let mappedMouseX = mouseX - width / 2;
     let mappedMouseY = mouseY - height / 2;
 
@@ -32,26 +32,26 @@ function draw() {
         let xoff = 0;
         for (let x = 0; x < cols; x++) {
             
-            // 1. IL VULCANO
             let centerX = cols / 2;
             let centerY = rows / 2;
             let distFromCenter = dist(x, y, centerX, centerY);
             let volcanoEffect = 500 / (1 + pow(distFromCenter * 0.15, 2));
             
-            // 2. LA POSIZIONE REALE DEI PUNTI NELLO SPAZIO
             let actualX = x * scl - w/2;
             let actualY = y * scl - h/2;
-            let d = dist(actualX, actualY, mappedMouseX, mappedMouseY);
+            
+            // LA NUOVA FISICA: Interazione schiacciata in orizzontale
+            // Moltiplichiamo la Y per "schiacciare" l'area di interazione
+            // Questo crea un'ellisse allungata orizzontalmente
+            let distEllitticaHeight = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
             
             let mouseRepulsion = 0;
-            // HO RADDOPPIATO IL RAGGIO DI INTERAZIONE: ora reagisce in un'area enorme
-            let heightTriggerRadius = 600; 
+            let heightTriggerRadius = 800; // Raggio di base espanso
             
-            if (d < heightTriggerRadius) { 
-                mouseRepulsion = map(d, 0, heightTriggerRadius, 250, 0); 
+            if (distEllitticaHeight < heightTriggerRadius) { 
+                mouseRepulsion = map(distEllitticaHeight, 0, heightTriggerRadius, 250, 0); 
             }
 
-            // 3. RUMORE BASE
             let noiseVal = noise(xoff, yoff);
             terrain[x][y] = map(noiseVal, 0, 1, -50, 50) - volcanoEffect - mouseRepulsion;
             
@@ -73,20 +73,19 @@ function draw() {
             let actualY = y * scl - h/2;
             let mappedMouseX = mouseX - width / 2;
             let mappedMouseY = mouseY - height / 2;
-            let dColor = dist(actualX, actualY, mappedMouseX, mappedMouseY);
             
-            // AREA COLORE ESPANSA A QUASI TUTTO LO SCHERMO
-            let colorTriggerRadius = 800; 
+            // Stessa logica ellittica per il colore
+            let distEllitticaColor = sqrt(pow(actualX - mappedMouseX, 2) + pow((actualY - mappedMouseY) * 2.5, 2));
+            let colorTriggerRadius = 900; // Area molto ampia
 
-            if (dColor < colorTriggerRadius) {
-                // IL RISVEGLIO DEL MAGMA
-                let intensity = map(dColor, 0, colorTriggerRadius, 255, 50);
+            if (distEllitticaColor < colorTriggerRadius) {
+                let intensity = map(distEllitticaColor, 0, colorTriggerRadius, 255, 120);
                 stroke(214, 73, 51, intensity); // Rosso Magma
                 strokeWeight(map(z, 0, -600, 3, 8)); 
             } else {
-                // LA PENOMBRA (ora leggermente più visibile dall'inizio)
-                stroke(60, 20, 20, 100); // Un reticolo fantasma rossastro
-                strokeWeight(2); 
+                // LA PENOMBRA PIU' VISIBILE
+                stroke(150, 40, 30, 180); // Rosso mattone semi-trasparente e più forte
+                strokeWeight(3); // Leggermente più spesso
             }
             
             vertex(x * scl, y * scl, z);
@@ -95,7 +94,6 @@ function draw() {
     }
 }
 
-// Ridimensionamento fluido senza far sparire nulla
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     w = windowWidth * 1.5;
