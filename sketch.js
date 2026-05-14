@@ -1,44 +1,105 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8B & I CHILIMANGIARO | Magma Roots Ensemble</title>
+let cols, rows;
+let scl = 30; // Risoluzione della griglia
+let w, h;
+let flying = 0;
+let terrain = [];
+
+function setup() {
+    let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+    canvas.parent('canvas-container');
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    w = windowWidth * 1.5;
+    h = windowHeight * 1.5;
+    cols = floor(w / scl);
+    rows = floor(h / scl);
+
+    for (let x = 0; x < cols; x++) {
+        terrain[x] = [];
+    }
+}
+
+function draw() {
+    background(5); // Nero assoluto
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
-</head>
-<body>
+    flying -= 0.025; // Velocità della lava
+    let yoff = flying;
 
-    <div class="serial-number">8B-PROJECT // CHILIMANGIARO_v3.0</div>
+    // Fix Matematico: Allineamento Mouse 2D a Spazio 3D
+    let mappedMouseX = mouseX - width / 2;
+    let mappedMouseY = mouseY - height / 2;
 
-    <div id="canvas-container"></div>
+    for (let y = 0; y < rows; y++) {
+        let xoff = 0;
+        for (let x = 0; x < cols; x++) {
+            
+            // 1. IL VULCANO
+            let centerX = cols / 2;
+            let centerY = rows / 2;
+            let distFromCenter = dist(x, y, centerX, centerY);
+            let volcanoEffect = 500 / (1 + pow(distFromCenter * 0.15, 2));
+            
+            // 2. LA POSIZIONE REALE DEI PUNTI NELLO SPAZIO
+            let actualX = x * scl - w/2;
+            let actualY = y * scl - h/2;
+            let d = dist(actualX, actualY, mappedMouseX, mappedMouseY);
+            
+            let mouseRepulsion = 0;
+            // HO RADDOPPIATO IL RAGGIO DI INTERAZIONE: ora reagisce in un'area enorme
+            let heightTriggerRadius = 600; 
+            
+            if (d < heightTriggerRadius) { 
+                mouseRepulsion = map(d, 0, heightTriggerRadius, 250, 0); 
+            }
 
-    <main class="main-ui">
-        <div class="central-stack">
-            <h1 class="large-chilimangiaro">CHILIMANGIARO</h1>
-            <div class="tagline">- magma roots ensemble -</div>
-        </div>
-    </main>
+            // 3. RUMORE BASE
+            let noiseVal = noise(xoff, yoff);
+            terrain[x][y] = map(noiseVal, 0, 1, -50, 50) - volcanoEffect - mouseRepulsion;
+            
+            xoff += 0.1;
+        }
+        yoff += 0.1;
+    }
 
-    <footer>
-        <a href="mailto:chilimangiaroband@gmail.com" class="footer-link">
-            <i class="fa-regular fa-envelope"></i>
-            <span>mail @chilimangiaro</span>
-        </a>
+    rotateX(PI / 2.6); 
+    rotateZ(frameCount * 0.001); 
+    translate(-w / 2, -h / 2);
 
-        <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
-            <span>Instagram</span>
-            <i class="fa-brands fa-instagram"></i>
-        </a>
-    </footer>
+    for (let y = 0; y < rows - 1; y++) {
+        beginShape(POINTS); 
+        for (let x = 0; x < cols; x++) {
+            let z = terrain[x][y];
+            
+            let actualX = x * scl - w/2;
+            let actualY = y * scl - h/2;
+            let mappedMouseX = mouseX - width / 2;
+            let mappedMouseY = mouseY - height / 2;
+            let dColor = dist(actualX, actualY, mappedMouseX, mappedMouseY);
+            
+            // AREA COLORE ESPANSA A QUASI TUTTO LO SCHERMO
+            let colorTriggerRadius = 800; 
 
-    <script src="sketch.js"></script>
-</body>
-</html>
+            if (dColor < colorTriggerRadius) {
+                // IL RISVEGLIO DEL MAGMA
+                let intensity = map(dColor, 0, colorTriggerRadius, 255, 50);
+                stroke(214, 73, 51, intensity); // Rosso Magma
+                strokeWeight(map(z, 0, -600, 3, 8)); 
+            } else {
+                // LA PENOMBRA (ora leggermente più visibile dall'inizio)
+                stroke(60, 20, 20, 100); // Un reticolo fantasma rossastro
+                strokeWeight(2); 
+            }
+            
+            vertex(x * scl, y * scl, z);
+        }
+        endShape();
+    }
+}
+
+// Ridimensionamento fluido senza far sparire nulla
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    w = windowWidth * 1.5;
+    h = windowHeight * 1.5;
+    cols = floor(w / scl);
+    rows = floor(h / scl);
+}
