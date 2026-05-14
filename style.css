@@ -1,7 +1,7 @@
 :root {
-    --bg-color: #064f34; /* Verde foresta profondo */
+    --bg-color: #064f34; 
     --text-color: #FFFFFF; 
-    --accent-color: #D64933; /* Rosso Magma */
+    --accent-color: #D64933; 
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,7 +39,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 10px; /* Leggermente aumentato per far respirare gli elementi */
 }
 
 h1.large-chilimangiaro {
@@ -56,14 +56,49 @@ h1.large-chilimangiaro {
     text-transform: uppercase;
     letter-spacing: 3px;
     color: var(--text-color);
-    padding: 10px 20px;
+    padding: 5px 20px;
     display: inline-block;
     line-height: 1.4;
 }
 
-/* LA MAGIA RESPONSIVE */
+/* IL NUOVO BOTTONE AUDIO */
+#magma-sound-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: transparent;
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+    font-family: 'Special Elite', cursive;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    pointer-events: auto; /* Riabilita il click su questo specifico elemento */
+    border-radius: 2px;
+}
+
+#magma-sound-btn:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(214, 73, 51, 0.4);
+}
+
+/* Effetto pulsante quando la traccia suona */
+#magma-sound-btn.playing {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    animation: pulse-magma 2s infinite;
+}
+
+@keyframes pulse-magma {
+    0% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(214, 73, 51, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
+}
+
 .mobile-only {
-    display: none; /* Nascosto nel vuoto sui desktop */
+    display: none; 
 }
 
 footer {
@@ -98,26 +133,29 @@ footer > * {
     transform: translateY(-3px);
 }
 
+/* FIRMA SUPERIORE CENTRATA */
 .serial-number {
     position: fixed;
     top: 30px;
-    left: 40px;
+    left: 0;
+    width: 100%;
+    text-align: center; /* Allinea il testo perfettamente al centro */
     font-size: 0.8rem;
     color: var(--text-color);
     opacity: 0.5;
     letter-spacing: 2px;
     z-index: 20;
+    pointer-events: none;
 }
 
-/* REGOLE PER IL COLLASSO SPAZIALE (MOBILE) */
 @media (max-width: 768px) {
     .mobile-only {
-        display: block; /* La rottura si manifesta */
+        display: block; 
     }
     
     h1.large-chilimangiaro {
-        line-height: 0.85; /* Ravvicina le parole spezzate CHILI e MANGIARO */
-        margin-bottom: 15px; /* Spazio extra tra la vetta e la tagline */
+        line-height: 0.85; 
+        margin-bottom: 15px; 
     }
 
     footer {
