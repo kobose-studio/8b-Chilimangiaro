@@ -19,7 +19,6 @@ function setup() {
 }
 
 function draw() {
-    // clear() rende il canvas trasparente, svelando il verde #064f34 dal CSS
     clear(); 
     
     flying -= 0.025; 
@@ -85,7 +84,6 @@ function draw() {
     }
 }
 
-// IL FIX DELLA MATRICE (Evita la scomparsa dei punti al resize)
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     
