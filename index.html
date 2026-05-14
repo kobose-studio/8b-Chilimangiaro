@@ -23,42 +23,95 @@
     <main class="main-ui">
         <div class="central-stack">
             <h1 class="large-chilimangiaro">CHILI<br class="mobile-only">MANGIARO</h1>
-            <div class="tagline">- magma roots ensemble -</div>
-            
-            <button id="magma-sound-btn" onclick="toggleMagmaSound()">MAGMA SOUND: OFF</button>
+            <div class="tagline">- 8B & I CHILIMANGIARO: <br class="mobile-only">MAGMA ROOTS ENSEMBLE -</div>
         </div>
     </main>
 
     <footer>
-        <a href="mailto:chilimangiaroband@gmail.com" target="_blank" class="footer-link mail-link">
-            <i class="fa-regular fa-envelope"></i>
-            <span>mail @chilimangiaro</span>
-        </a>
+        <div class="footer-block left">
+            <a href="mailto:chilimangiaroband@gmail.com" target="_blank" class="footer-link mail-link">
+                <i class="fa-regular fa-envelope"></i>
+                <span>mail @chilimangiaro</span>
+            </a>
+        </div>
 
-        <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
-            <span>Instagram</span>
-            <i class="fa-brands fa-instagram"></i>
-        </a>
+        <div class="footer-block center">
+            <div class="audio-wrapper" onclick="toggleMagmaSound()">
+                <div id="visualizer" class="audio-control">
+                    <span class="bar" style="animation-delay: 0.1s"></span>
+                    <span class="bar" style="animation-delay: 0.3s"></span>
+                    <span class="bar" style="animation-delay: 0.2s"></span>
+                </div>
+                <span id="audio-label" class="audio-status-label">MAGMA OFF</span>
+            </div>
+        </div>
+
+        <div class="footer-block right">
+            <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
+                <span>Instagram</span>
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
     </footer>
 
-    <audio id="magma-audio" loop preload="auto">
-        <source src="LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_60sec.mp3" type="audio/mpeg">
+    <audio id="magma-audio" loop preload="auto" crossorigin="anonymous">
+        <source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_60sec.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         let magmaAudio = document.getElementById('magma-audio');
-        let soundBtn = document.getElementById('magma-sound-btn');
+        let visualizer = document.getElementById('visualizer');
+        let audioLabel = document.getElementById('audio-label');
         let isPlaying = false;
 
+        // ALCHIMIA AUDIO: Analizzatore di Frequenze Web Audio API
+        window.audioAmplitude = 0; // Variabile globale che p5.js leggerà
+        let audioCtx, analyser, source, dataArray;
+
+        function initAudio() {
+            if (!audioCtx) {
+                // Inizializza il motore sonoro al primo click dell'utente
+                let AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256; // Risoluzione frequenze
+                
+                source = audioCtx.createMediaElementSource(magmaAudio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                
+                // Funzione che aggiorna il volume globale a ogni frame
+                function updateAmplitude() {
+                    requestAnimationFrame(updateAmplitude);
+                    if (isPlaying) {
+                        analyser.getByteFrequencyData(dataArray);
+                        let sum = 0;
+                        for(let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
+                        window.audioAmplitude = sum / dataArray.length; // Media del volume
+                    } else {
+                        window.audioAmplitude = 0;
+                    }
+                }
+                updateAmplitude();
+            }
+        }
+
         function toggleMagmaSound() {
+            initAudio(); // Richiama il setup
+            
+            // Riattiva il contesto se sospeso dal browser
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
             if (isPlaying) {
                 magmaAudio.pause();
-                soundBtn.innerText = "MAGMA SOUND: OFF";
-                soundBtn.classList.remove('playing');
+                audioLabel.innerText = "MAGMA OFF";
+                visualizer.classList.remove('playing');
             } else {
-                magmaAudio.play().catch(e => console.log("L'eco è stato bloccato dal browser."));
-                soundBtn.innerText = "MAGMA SOUND: ON";
-                soundBtn.classList.add('playing');
+                magmaAudio.play().catch(e => console.log("L'eco è bloccato.", e));
+                audioLabel.innerText = "MAGMA ON";
+                visualizer.classList.add('playing');
             }
             isPlaying = !isPlaying;
         }
