@@ -58,6 +58,12 @@ h1.large-chilimangiaro {
     color: var(--text-color);
     padding: 10px 20px;
     display: inline-block;
+    line-height: 1.4;
+}
+
+/* LA MAGIA RESPONSIVE */
+.mobile-only {
+    display: none; /* Nascosto nel vuoto sui desktop */
 }
 
 footer {
@@ -103,7 +109,17 @@ footer > * {
     z-index: 20;
 }
 
+/* REGOLE PER IL COLLASSO SPAZIALE (MOBILE) */
 @media (max-width: 768px) {
+    .mobile-only {
+        display: block; /* La rottura si manifesta */
+    }
+    
+    h1.large-chilimangiaro {
+        line-height: 0.85; /* Ravvicina le parole spezzate CHILI e MANGIARO */
+        margin-bottom: 15px; /* Spazio extra tra la vetta e la tagline */
+    }
+
     footer {
         flex-direction: column;
         align-items: center;
