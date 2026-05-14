@@ -23,7 +23,9 @@
     <main class="main-ui">
         <div class="central-stack">
             <h1 class="large-chilimangiaro">CHILI<br class="mobile-only">MANGIARO</h1>
-            <div class="tagline">- 8B & I CHILIMANGIARO: <br class="mobile-only">MAGMA ROOTS ENSEMBLE -</div>
+            <div class="tagline">- magma roots ensemble -</div>
+            
+            <button id="magma-sound-btn" onclick="toggleMagmaSound()">MAGMA SOUND: OFF</button>
         </div>
     </main>
 
@@ -38,6 +40,29 @@
             <i class="fa-brands fa-instagram"></i>
         </a>
     </footer>
+
+    <audio id="magma-audio" loop preload="auto">
+        <source src="LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_60sec.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let magmaAudio = document.getElementById('magma-audio');
+        let soundBtn = document.getElementById('magma-sound-btn');
+        let isPlaying = false;
+
+        function toggleMagmaSound() {
+            if (isPlaying) {
+                magmaAudio.pause();
+                soundBtn.innerText = "MAGMA SOUND: OFF";
+                soundBtn.classList.remove('playing');
+            } else {
+                magmaAudio.play().catch(e => console.log("L'eco è stato bloccato dal browser."));
+                soundBtn.innerText = "MAGMA SOUND: ON";
+                soundBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
 
     <script src="sketch.js"></script>
 </body>
