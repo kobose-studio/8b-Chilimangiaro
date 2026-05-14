@@ -1,149 +1,110 @@
-:root {
-    --bg-color: #064f34; 
-    --text-color: #FFFFFF; 
-    --accent-color: #D64933; 
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.15; 
-    mix-blend-mode: overlay;
-    z-index: 50; 
-    pointer-events: none; 
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Special Elite', cursive;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#canvas-container {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
-}
-
-.main-ui {
-    position: relative; z-index: 10; text-align: center; pointer-events: none; 
-}
-
-.central-stack {
-    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
-}
-
-h1.large-chilimangiaro {
-    font-size: clamp(3rem, 10vw, 6rem);
-    line-height: 1;
-    margin-bottom: 0;
-    letter-spacing: 2px;
-    color: var(--accent-color);
-    text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); 
-}
-
-.tagline {
-    font-size: 1rem; 
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--text-color);
-    padding: 10px 20px;
-    display: inline-block;
-    line-height: 1.4;
-}
-
-.mobile-only { display: none; }
-
-/* POSIZIONAMENTO IN MEZZERIA (A metà tra centro e footer) */
-.volcano-sound-container {
-    position: fixed;
-    bottom: 35vh; /* ALZATO IN MEZZERIA: 35% partendo dal fondo */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    pointer-events: auto; 
-}
-
-/* STILE BOTTONE VINTAGE FRAMED RETTANGOLARE */
-#magma-sound-btn {
-    padding: 10px 25px;
-    background: transparent;
-    border: 2px solid var(--accent-color); /* Rettangolare e materico */
-    color: var(--accent-color);
-    font-family: 'Special Elite', cursive;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    border-radius: 2px;
-}
-
-#magma-sound-btn:hover {
-    background-color: rgba(214, 73, 51, 0.1);
-    box-shadow: 0 0 15px rgba(214, 73, 51, 0.4);
-}
-
-/* Effetto pulsante quando la traccia suona */
-#magma-sound-btn.playing {
-    animation: pulse-magma 2s infinite;
-    background-color: rgba(214, 73, 51, 0.15);
-}
-
-@keyframes pulse-magma {
-    0% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
-    50% { box-shadow: 0 0 20px rgba(214, 73, 51, 0.6); }
-    100% { box-shadow: 0 0 5px rgba(214, 73, 51, 0.2); }
-}
-
-/* FOOTER OTTIMIZZATO PER TESTI LUNGHI */
-footer {
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    padding: 30px 40px;
-    display: flex;
-    justify-content: space-between; /* Spinge gli elementi ai lati estremi */
-    align-items: flex-end;
-    z-index: 20;
-    pointer-events: none; 
-}
-
-.footer-block { pointer-events: auto; }
-
-.footer-link {
-    color: var(--text-color); text-decoration: none; font-size: 1.1rem;
-    transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
-}
-.footer-link:hover { color: var(--accent-color); transform: translateY(-3px); }
-
-.serial-number {
-    position: fixed; top: 30px; left: 0; width: 100%; text-align: center;
-    font-size: 0.8rem; color: var(--text-color); opacity: 0.5; letter-spacing: 2px;
-    z-index: 20; pointer-events: none;
-}
-
-@media (max-width: 768px) {
-    .mobile-only { display: block; }
-    h1.large-chilimangiaro { line-height: 0.85; margin-bottom: 15px; }
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8B & I CHILIMANGIARO | Magma Roots Ensemble</title>
     
-    footer {
-        display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px;
-        text-align: center;
-    }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     
-    .footer-link {
-        font-size: 0.9rem; /* Rimpiccioliamo leggermente la mail lunga su mobile */
-    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     
-    .volcano-sound-container {
-        bottom: 35vh; /* Alzato ancora su mobile per evitare l'ingombro del footer impilato */
-    }
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+</head>
+<body>
+
+    <div class="serial-number">8B & I CHILIMANGIARO</div>
+
+    <div id="canvas-container"></div>
+
+    <main class="main-ui">
+        <div class="central-stack">
+            <h1 class="large-chilimangiaro">CHILI<br class="mobile-only">MANGIARO</h1>
+            <div class="tagline">- MAGMA ROOTS ENSEMBLE -</div>
+        </div>
+    </main>
+
+    <div class="volcano-sound-container">
+        <button id="magma-sound-btn" onclick="toggleMagmaSound()">VOLCANO SOUND: OFF</button>
+    </div>
+
+    <footer>
+        <div class="footer-block left">
+            <a href="mailto:info@chilimangiaro.com" target="_blank" class="footer-link mail-link">
+                <i class="fa-regular fa-envelope"></i>
+                <span>Booking | info@chilimangiaro.com</span>
+            </a>
+        </div>
+
+        <div class="footer-block center"></div>
+
+        <div class="footer-block right">
+            <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
+                <span>Instagram</span>
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
+    </footer>
+
+    <audio id="magma-audio" loop preload="auto" crossorigin="anonymous">
+        <source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_25sec.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let magmaAudio = document.getElementById('magma-audio');
+        let soundBtn = document.getElementById('magma-sound-btn');
+        let isPlaying = false;
+
+        window.audioAmplitude = 0; 
+        let audioCtx, analyser, source, dataArray;
+
+        function initAudio() {
+            if (!audioCtx) {
+                let AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256; 
+                
+                source = audioCtx.createMediaElementSource(magmaAudio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                
+                function updateAmplitude() {
+                    requestAnimationFrame(updateAmplitude);
+                    if (isPlaying) {
+                        analyser.getByteFrequencyData(dataArray);
+                        let sum = 0;
+                        for(let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
+                        window.audioAmplitude = sum / dataArray.length; 
+                    } else {
+                        window.audioAmplitude = 0;
+                    }
+                }
+                updateAmplitude();
+            }
+        }
+
+        function toggleMagmaSound() {
+            initAudio(); 
+            
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
+            if (isPlaying) {
+                magmaAudio.pause();
+                soundBtn.innerText = "VOLCANO SOUND: OFF";
+                soundBtn.classList.remove('playing');
+            } else {
+                magmaAudio.play().catch(e => console.log("L'eco è bloccato.", e));
+                soundBtn.innerText = "VOLCANO SOUND: ON";
+                soundBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
