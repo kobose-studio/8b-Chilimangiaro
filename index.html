@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=7.0">
+    <link rel="stylesheet" href="style.css?v=8.0">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
@@ -31,8 +31,24 @@
     </main>
 
     <div class="volcano-sound-container">
+        <button class="manifesto-trigger" onclick="toggleManifesto()">[ MANIFESTO ]</button>
+        
         <button id="magma-sound-btn" onclick="toggleMagmaSound()">VOLCANO SOUND: OFF</button>
         <div id="track-info" class="track-credits">Track: LOVEWELL - 8B & I CHILIMANGIARO</div>
+    </div>
+
+    <div id="manifesto-overlay" class="overlay">
+        <button class="close-manifesto" onclick="toggleManifesto()">[ CLOSE_X ]</button>
+        <div class="overlay-content">
+            <h2>MANIFESTO</h2>
+            <div class="manifesto-body">
+                <p class="m-highlight">8B & I CHILIMANGIARO<br>Magma Roots Ensemble.</p>
+                <p>We don’t play music; we trigger eruptions.</p>
+                <p>Chilimangiaro is a collective born to deconstruct the boundaries of sound. We take the solid foundations of Reggae Roots and Roots Lovers and melt them into a flow of World, Soul, Funk and Jazz.</p>
+                <p>Guided by the creative vision of 8B, our Dub excursions are not just a style, but a physical space: the <strong>Cratere Sonoro (Sonic Crater)</strong>. It’s a place where low frequencies dictate the law and the "Levare" rhythm is the heartbeat of a collective ritual.</p>
+                <p class="m-footer">No borders. No clichés. Just Magma.</p>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -42,6 +58,13 @@
                 <span>Booking | info@chilimangiaro.com</span>
             </a>
         </div>
+
+        <div class="footer-block center">
+            <div class="credits-line">
+                © CHILIMANGIARO 2026 // artwork + web | <a href="http://kobose.it" target="_blank">kobose</a>
+            </div>
+        </div>
+
         <div class="footer-block right">
             <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
                 <span>Instagram</span>
@@ -58,10 +81,15 @@
         let magmaAudio = document.getElementById('magma-audio');
         let soundBtn = document.getElementById('magma-sound-btn');
         let trackInfo = document.getElementById('track-info');
+        let manifesto = document.getElementById('manifesto-overlay');
         let isPlaying = false;
 
         window.audioAmplitude = 0; 
         let audioCtx, analyser, source, dataArray;
+
+        function toggleManifesto() {
+            manifesto.classList.toggle('active');
+        }
 
         function initAudio() {
             if (!audioCtx) {
@@ -94,16 +122,16 @@
                 magmaAudio.pause();
                 soundBtn.innerText = "VOLCANO SOUND: OFF";
                 soundBtn.classList.remove('playing');
-                trackInfo.classList.remove('active'); // Torna in penombra
+                trackInfo.classList.remove('active');
             } else {
                 magmaAudio.play().catch(e => console.log("Segnale bloccato."));
                 soundBtn.innerText = "VOLCANO SOUND: ON";
                 soundBtn.classList.add('playing');
-                trackInfo.classList.add('active'); // Si accende
+                trackInfo.classList.add('active');
             }
             isPlaying = !isPlaying;
         }
     </script>
-    <script src="sketch.js?v=7.0"></script>
+    <script src="sketch.js?v=8.0"></script>
 </body>
 </html>
