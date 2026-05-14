@@ -19,15 +19,15 @@ function setup() {
 }
 
 function draw() {
-    // Fondo allineato con il CSS: Verde Profondo
-    background('#064f34'); 
+    // FIX COLORE: RGB puro per forzare il WebGL a renderizzare il #064f34
+    // R: 6, G: 79, B: 52
+    background(6, 79, 52); 
     
     flying -= 0.025; 
     let yoff = flying;
 
-    // Mappatura pura da monitor a griglia per evitare sfalsamenti 3D
     let mouseGridX = map(mouseX, 0, width, 0, cols);
-    let mouseGridY = map(mouseY, 0, height, rows * 0.1, rows * 0.9); // Compensiamo la prospettiva
+    let mouseGridY = map(mouseY, 0, height, rows * 0.1, rows * 0.9); 
 
     for (let y = 0; y < rows; y++) {
         let xoff = 0;
@@ -38,15 +38,12 @@ function draw() {
             let distFromCenter = dist(x, y, centerX, centerY);
             let volcanoEffect = 500 / (1 + pow(distFromCenter * 0.15, 2));
             
-            // LA NUOVA FISICA: L'Onda Orizzontale Totale
-            // Moltiplicando dx per 0.01 annulliamo l'asse X dal calcolo della distanza.
-            // L'area sensibile diventa una fascia che copre *tutto* lo schermo da sx a dx!
             let dx = (x - mouseGridX) * 0.01; 
             let dy = (y - mouseGridY) * 1.2; 
             let distFascia = sqrt(dx*dx + dy*dy);
             
             let mouseRepulsion = 0;
-            let heightTriggerRadius = 15; // Raggio sulla griglia (ora è un raggio verticale)
+            let heightTriggerRadius = 15; 
             
             if (distFascia < heightTriggerRadius) { 
                 mouseRepulsion = map(distFascia, 0, heightTriggerRadius, 250, 0); 
@@ -61,7 +58,6 @@ function draw() {
     }
 
     rotateX(PI / 2.6); 
-    // Rotazione Z rimossa: era lei a spingere l'area sensibile fuori asse.
     translate(-w / 2, -h / 2);
 
     for (let y = 0; y < rows - 1; y++) {
@@ -73,16 +69,13 @@ function draw() {
             let dy = (y - mouseGridY) * 1.2; 
             let distFasciaColor = sqrt(dx*dx + dy*dy);
             
-            let colorTriggerRadius = 22; // Ampiezza verticale della fascia magmatica
+            let colorTriggerRadius = 22; 
 
             if (distFasciaColor < colorTriggerRadius) {
-                // IL MAGMA: L'onda rivelatrice rossa
                 let intensity = map(distFasciaColor, 0, colorTriggerRadius, 255, 60);
                 stroke(214, 73, 51, intensity); 
-                strokeWeight(map(z, 0, -600, 3, 9)); // Punti più carnosi
+                strokeWeight(map(z, 0, -600, 3, 9)); 
             } else {
-                // LA PENOMBRA: Ora molto più visibile e persistente
-                // Un rosso traslucido che crea un contrasto poetico col verde fondo
                 stroke(214, 73, 51, 60); 
                 strokeWeight(3.5); 
             }
