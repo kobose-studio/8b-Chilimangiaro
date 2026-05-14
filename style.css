@@ -1,7 +1,7 @@
 :root {
-    --bg-color: #050505; /* Nero profondo */
-    --text-color: #FFFFFF; /* Testi bianchi */
-    --accent-color: #D64933; /* Rosso Magma dal logo */
+    --bg-color: #050505; 
+    --text-color: #FFFFFF; 
+    --accent-color: #D64933; 
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,7 +31,7 @@ body {
     position: relative;
     z-index: 10;
     text-align: center;
-    pointer-events: none; /* Lascia che il mouse tocchi i punti 3D dietro */
+    pointer-events: none; 
 }
 
 .central-stack {
@@ -42,26 +42,24 @@ body {
     gap: 5px;
 }
 
-/* LA VETTA */
 h1.large-chilimangiaro {
     font-size: clamp(3rem, 10vw, 6rem);
     line-height: 1;
     margin-bottom: 0;
     letter-spacing: 2px;
     color: var(--accent-color);
-    text-shadow: 0 0 30px rgba(214, 73, 51, 0.3); /* Leggero bagliore */
+    text-shadow: 0 0 30px rgba(214, 73, 51, 0.3); 
 }
 
 .tagline {
-    font-size: 1.2rem;
+    font-size: 1rem; /* Leggermente ridotto per far stare la frase lunga */
     text-transform: uppercase;
-    letter-spacing: 5px;
+    letter-spacing: 3px;
     color: var(--text-color);
     padding: 10px 20px;
     display: inline-block;
 }
 
-/* FOOTER Stile Discolow */
 footer {
     position: fixed;
     bottom: 0;
@@ -72,11 +70,11 @@ footer {
     justify-content: space-between;
     align-items: flex-end;
     z-index: 20;
-    pointer-events: none; /* Il contenitore non blocca il mouse... */
+    pointer-events: none; 
 }
 
 footer > * {
-    pointer-events: auto; /* ...ma i link dentro sono cliccabili! FIX MAIL */
+    pointer-events: auto; 
 }
 
 .footer-link {
