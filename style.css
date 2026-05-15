@@ -1,132 +1,56 @@
-:root { 
-    --bg-color: #064f34; 
-    --text-color: #FFFFFF; 
-    --accent-color: #D64933; 
-}
+/* CHILIMANGIARO - MAGMA_ROOTS_CSS v3.0 [STABLE]
+   - FIX: Mobile Centering & Title Wrap
+   - FIX: Manifesto Hierarchies & Bolding
+   - UPDATE: Footer simplified credit
+*/
 
+:root { --bg-color: #064f34; --text-color: #FFFFFF; --accent-color: #D64933; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-body { 
-    background-color: var(--bg-color); 
-    color: var(--text-color); 
-    font-family: 'Special Elite', cursive; 
-    height: 100vh; 
-    overflow: hidden; 
-}
-
-/* ANTI-BLUE GLITCH PER I LINK */
+body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Special Elite', cursive; height: 100vh; overflow: hidden; }
 a, a:visited, a:active { color: var(--text-color) !important; text-decoration: none !important; font-family: 'Special Elite', cursive !important; }
-
-/* TEXTURE NOISE GLOBALE */
-body::before, .overlay::before { 
-    content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
-    opacity: 0.15; mix-blend-mode: overlay; z-index: 50; pointer-events: none; 
-}
-
+body::before, .overlay::before { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.15; mix-blend-mode: overlay; z-index: 50; pointer-events: none; }
 #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-/* TITOLO E DESKTOP/MOBILE LOGIC */
-.mobile-text { display: none; }
-.desktop-text { display: inline; }
-
 .main-ui { position: relative; z-index: 10; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; pointer-events: none; }
-h1.large-chilimangiaro { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); margin-bottom: 0; line-height: 1; }
-.tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
+h1.large-chilimangiaro { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); line-height: 1; }
+.mobile-text { display: none; } .desktop-text { display: inline; }
 
-/* TRIGGER MANIFESTO IN ALTO */
-.serial-number { 
-    position: fixed; top: 30px; left: 0; width: 100%; text-align: center; 
-    font-size: 0.8rem; letter-spacing: 2px; z-index: 300; cursor: pointer; 
-    transition: 0.3s; pointer-events: auto; 
-}
+.serial-number { position: fixed; top: 30px; left: 0; width: 100%; text-align: center; font-size: 0.8rem; letter-spacing: 2px; z-index: 300; cursor: pointer; transition: 0.3s; pointer-events: auto; }
 .serial-number .hover-text { display: none; color: var(--accent-color); font-weight: bold; }
 .serial-number:hover .default-text { display: none; }
 .serial-number:hover .hover-text { display: inline; text-shadow: 0 0 10px rgba(214, 73, 51, 0.5); }
 
-/* BOTTONE SUONO VULCANO (Z-INDEX ALZATO PER GARANTIRE CLICK) */
-.volcano-sound-container { position: fixed; bottom: 25vh; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; display: flex; flex-direction: column; align-items: center; }
-#magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; pointer-events: auto !important; }
+.volcano-sound-container { position: fixed; bottom: 25vh; left: 50%; transform: translateX(-50%); z-index: 300; display: flex; flex-direction: column; align-items: center; }
+#magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; pointer-events: auto; }
 #magma-sound-btn:hover, #magma-sound-btn.playing { background-color: rgba(214, 73, 51, 0.15); box-shadow: 0 0 20px rgba(214, 73, 51, 0.5); }
 .track-credits { font-size: 0.65rem; opacity: 0.15; margin-top: 15px; letter-spacing: 2px; text-transform: uppercase; transition: 0.8s; }
 .track-credits.active { opacity: 1; }
 
-/* OVERLAY SOTTOPAGINA MANIFESTO */
-.overlay { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background-color: rgba(6, 79, 52, 0.98); z-index: 400; 
-    display: none; justify-content: center; align-items: center; 
-    overflow-y: auto; pointer-events: auto; 
-}
-.overlay.active { display: flex; }
-.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 40px 20px; z-index: 410; margin: auto; }
-.overlay-content h2 { color: var(--accent-color); font-size: 2.5rem; margin-bottom: 25px; letter-spacing: 5px; }
-.manifesto-body p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
-.m-highlight { font-weight: bold; color: var(--accent-color); text-transform: uppercase; }
-.m-footer { margin-top: 40px; font-style: italic; opacity: 0.8; }
-.close-manifesto { 
-    position: fixed; top: 30px; right: 40px; background: transparent; 
-    border: 1px solid var(--text-color); color: var(--text-color); 
-    padding: 10px 20px; cursor: pointer; font-family: inherit; 
-    z-index: 420; transition: 0.3s; 
-}
-.close-manifesto:hover { color: var(--accent-color) !important; border-color: var(--accent-color); }
-
-/* FOOTER A 3 BLOCCHI PERFETTAMENTE ALLINEATI */
-footer { 
-    position: fixed; bottom: 30px; left: 0; width: 100%; 
-    padding: 0 40px; display: flex; justify-content: space-between; 
-    align-items: center; z-index: 100; pointer-events: none; 
-}
+footer { position: fixed; bottom: 30px; left: 0; width: 100%; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100; pointer-events: none; }
 .footer-block { flex: 1; pointer-events: auto; }
 .footer-block.left { display: flex; justify-content: flex-start; }
-.footer-block.center { display: flex; justify-content: center; text-align: center; }
+.footer-block.center { display: flex; justify-content: center; }
 .footer-block.right { display: flex; justify-content: flex-end; }
-.footer-link { font-size: 0.95rem; display: flex; align-items: center; gap: 8px; opacity: 0.7; transition: 0.3s; }
+.footer-link { font-size: 0.95rem; display: flex; align-items: center; gap: 8px; opacity: 0.7; }
 .footer-link:hover { color: var(--accent-color) !important; opacity: 1; }
 .credits-line { font-size: 0.8rem; opacity: 0.7; letter-spacing: 1px; }
-.credits-line a { border-bottom: 1px solid var(--text-color); transition: 0.3s; }
-.credits-line a:hover { color: var(--accent-color) !important; border-color: var(--accent-color) !important; }
+.credits-line a { border-bottom: 1px solid var(--text-color); }
 
-/* RESPONSIVE SMARTPHONE - CORRETTO */
+.overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(6, 79, 52, 0.98); z-index: 400; display: none; justify-content: center; align-items: center; overflow-y: auto; pointer-events: auto; }
+.overlay.active { display: flex; }
+.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 40px 20px; margin: auto; }
+.m-highlight { color: var(--accent-color); font-size: 2.2rem; margin-bottom: 5px; }
+.m-subhighlight { font-size: 1rem; opacity: 0.6; margin-bottom: 30px; text-transform: uppercase; }
+.manifesto-body p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
+.close-manifesto { position: fixed; top: 30px; right: 40px; background: transparent; border: 1px solid var(--text-color); color: var(--text-color); padding: 10px 20px; cursor: pointer; z-index: 420; }
+
 @media (max-width: 768px) {
-    .mobile-text { display: block; } /* FORZA SU DUE RIGHE */
-    .desktop-text { display: none; }
-    
-    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 0.9; margin-bottom: 0; }
-    .tagline { font-size: 0.8rem; margin-top: 15px; }
-    
-    /* CENTRAGGIO ASSOLUTO BOTTONE: Fisso e visibile */
-    .volcano-sound-container { 
-        position: fixed; 
-        bottom: 150px; /* Ancorato saldamente sopra il footer */
-        left: 50%; 
-        transform: translateX(-50%); 
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin-top: 0;
-    }
-    #magma-sound-btn { min-width: 220px; font-size: 0.95rem; }
-    
-    /* FOOTER FISSO IN BASSO: Non scivola fuori dallo schermo */
-    footer { 
-        position: fixed; 
-        bottom: 0; 
-        left: 0;
-        width: 100%;
-        padding: 15px 10px; 
-        flex-direction: column; 
-        gap: 8px; 
-        background: rgba(0,0,0,0.6); 
-    }
-    .footer-block.left, .footer-block.center, .footer-block.right { justify-content: center; text-align: center; width: 100%; }
-    .footer-link { font-size: 0.8rem; }
-    .credits-line { font-size: 0.65rem; }
-    
+    .mobile-text { display: block; } .desktop-text { display: none; }
+    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 0.9; margin-bottom: 15px; }
+    footer { position: fixed; bottom: 0; padding: 15px 10px; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.6); pointer-events: auto; }
+    .footer-block { justify-content: center; text-align: center; }
+    .volcano-sound-container { bottom: 150px; left: 50%; transform: translateX(-50%); width: 100%; }
+    #magma-sound-btn { min-width: 220px; }
     .overlay-content h2 { font-size: 1.8rem; }
-    .manifesto-body p { font-size: 0.95rem; }
-    .close-manifesto { top: 20px; right: 20px; padding: 8px 15px; }
-    
-    body { overflow: hidden; } /* DISABILITA LO SCROLL: TUTTO È NELLO SCHERMO */
+    body { overflow: hidden; }
 }
