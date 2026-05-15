@@ -14,12 +14,8 @@ body {
     overflow: hidden; 
 }
 
-/* FIX GLOBALE PER TUTTI I LINK: Forza il font e il colore bianco */
-a, a:visited, a:active {
-    color: var(--text-color) !important;
-    text-decoration: none !important;
-    font-family: 'Special Elite', cursive !important;
-}
+/* ANTI-BLUE GLITCH PER I LINK */
+a, a:visited, a:active { color: var(--text-color) !important; text-decoration: none !important; font-family: 'Special Elite', cursive !important; }
 
 /* TEXTURE NOISE GLOBALE */
 body::before, .overlay::before { 
@@ -30,55 +26,40 @@ body::before, .overlay::before {
 
 #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-/* UI CENTRALE */
+/* TITOLO E DESKTOP/MOBILE LOGIC */
+.mobile-text { display: none; }
+.desktop-text { display: inline; }
+
 .main-ui { position: relative; z-index: 10; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; pointer-events: none; }
-h1.large-chilimangiaro { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); margin-bottom: 0; }
+h1.large-chilimangiaro { font-size: clamp(3rem, 10vw, 6rem); color: var(--accent-color); text-shadow: 0 0 30px rgba(214, 73, 51, 0.2); margin-bottom: 0; line-height: 1; }
 .tagline { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 10px; }
 
 /* TRIGGER MANIFESTO IN ALTO */
 .serial-number { 
     position: fixed; top: 30px; left: 0; width: 100%; text-align: center; 
-    font-size: 0.8rem; letter-spacing: 2px; z-index: 150; cursor: pointer; 
+    font-size: 0.8rem; letter-spacing: 2px; z-index: 300; cursor: pointer; 
     transition: 0.3s; pointer-events: auto; 
 }
-.serial-number:hover { color: var(--accent-color); text-shadow: 0 0 10px rgba(214, 73, 51, 0.5); }
+.serial-number .hover-text { display: none; color: var(--accent-color); font-weight: bold; }
+.serial-number:hover .default-text { display: none; }
+.serial-number:hover .hover-text { display: inline; text-shadow: 0 0 10px rgba(214, 73, 51, 0.5); }
 
-/* BOTTONE SUONO VULCANO */
-.volcano-sound-container { position: fixed; bottom: 25vh; left: 50%; transform: translateX(-50%); z-index: 60; pointer-events: auto; }
-#magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+/* BOTTONE SUONO VULCANO (Z-INDEX ALZATO PER GARANTIRE CLICK) */
+.volcano-sound-container { position: fixed; bottom: 25vh; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: auto; display: flex; flex-direction: column; align-items: center; }
+#magma-sound-btn { padding: 12px 30px; min-width: 280px; background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; pointer-events: auto !important; }
 #magma-sound-btn:hover, #magma-sound-btn.playing { background-color: rgba(214, 73, 51, 0.15); box-shadow: 0 0 20px rgba(214, 73, 51, 0.5); }
-
-/* FOOTER A 3 BLOCCHI PERFETTAMENTE ALLINEATI */
-footer { 
-    position: fixed; bottom: 30px; left: 0; width: 100%; 
-    padding: 0 40px; display: flex; justify-content: space-between; 
-    align-items: center; z-index: 100; pointer-events: none; 
-}
-
-.footer-block { flex: 1; pointer-events: auto; }
-.footer-block.left { display: flex; justify-content: flex-start; }
-.footer-block.center { display: flex; justify-content: center; text-align: center; }
-.footer-block.right { display: flex; justify-content: flex-end; }
-
-.footer-link { 
-    font-size: 0.95rem; display: flex; align-items: center; gap: 8px; 
-    opacity: 0.7; transition: 0.3s; 
-}
-.footer-link:hover { color: var(--accent-color) !important; opacity: 1; }
-
-.credits-line { font-size: 0.8rem; opacity: 0.7; letter-spacing: 1px; }
-.credits-line a { border-bottom: 1px solid var(--text-color); transition: 0.3s; }
-.credits-line a:hover { color: var(--accent-color) !important; border-color: var(--accent-color) !important; }
+.track-credits { font-size: 0.65rem; opacity: 0.15; margin-top: 15px; letter-spacing: 2px; text-transform: uppercase; transition: 0.8s; }
+.track-credits.active { opacity: 1; }
 
 /* OVERLAY SOTTOPAGINA MANIFESTO */
 .overlay { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background-color: rgba(6, 79, 52, 0.98); z-index: 200; 
+    background-color: rgba(6, 79, 52, 0.98); z-index: 400; 
     display: none; justify-content: center; align-items: center; 
     overflow-y: auto; pointer-events: auto; 
 }
 .overlay.active { display: flex; }
-.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 40px 20px; z-index: 210; margin: auto; }
+.overlay-content { max-width: 800px; width: 90%; text-align: center; padding: 40px 20px; z-index: 410; margin: auto; }
 .overlay-content h2 { color: var(--accent-color); font-size: 2.5rem; margin-bottom: 25px; letter-spacing: 5px; }
 .manifesto-body p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
 .m-highlight { font-weight: bold; color: var(--accent-color); text-transform: uppercase; }
@@ -87,23 +68,34 @@ footer {
     position: fixed; top: 30px; right: 40px; background: transparent; 
     border: 1px solid var(--text-color); color: var(--text-color); 
     padding: 10px 20px; cursor: pointer; font-family: inherit; 
-    z-index: 220; transition: 0.3s; 
+    z-index: 420; transition: 0.3s; 
 }
 .close-manifesto:hover { color: var(--accent-color) !important; border-color: var(--accent-color); }
 
+/* FOOTER A 3 BLOCCHI PERFETTAMENTE ALLINEATI */
+footer { 
+    position: fixed; bottom: 30px; left: 0; width: 100%; 
+    padding: 0 40px; display: flex; justify-content: space-between; 
+    align-items: center; z-index: 100; pointer-events: none; 
+}
+.footer-block { flex: 1; pointer-events: auto; }
+.footer-block.left { display: flex; justify-content: flex-start; }
+.footer-block.center { display: flex; justify-content: center; text-align: center; }
+.footer-block.right { display: flex; justify-content: flex-end; }
+.footer-link { font-size: 0.95rem; display: flex; align-items: center; gap: 8px; opacity: 0.7; transition: 0.3s; }
+.footer-link:hover { color: var(--accent-color) !important; opacity: 1; }
+.credits-line { font-size: 0.8rem; opacity: 0.7; letter-spacing: 1px; }
+.credits-line a { border-bottom: 1px solid var(--text-color); transition: 0.3s; }
+.credits-line a:hover { color: var(--accent-color) !important; border-color: var(--accent-color) !important; }
+
 /* RESPONSIVE SMARTPHONE */
 @media (max-width: 768px) {
-    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 1; margin-bottom: 10px; }
+    .mobile-text { display: block; } /* FORZA SU DUE RIGHE */
+    .desktop-text { display: none; }
+    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 0.9; margin-bottom: 15px; }
     
-    /* Footer Mobile - Incolonnato per evitare overflow */
-    footer { 
-        position: relative; bottom: auto; padding: 30px 20px; 
-        flex-direction: column; gap: 15px; background: rgba(0,0,0,0.15); 
-        margin-top: 40px; 
-    }
-    .footer-block.left, .footer-block.center, .footer-block.right { 
-        justify-content: center; text-align: center; width: 100%; 
-    }
+    footer { position: relative; bottom: auto; padding: 30px 20px; flex-direction: column; gap: 15px; background: rgba(0,0,0,0.15); margin-top: 40px; }
+    .footer-block.left, .footer-block.center, .footer-block.right { justify-content: center; text-align: center; width: 100%; }
     
     .volcano-sound-container { position: relative; bottom: auto; margin-top: 40px; }
     #magma-sound-btn { min-width: 240px; }
