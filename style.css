@@ -88,21 +88,45 @@ footer {
 .credits-line a { border-bottom: 1px solid var(--text-color); transition: 0.3s; }
 .credits-line a:hover { color: var(--accent-color) !important; border-color: var(--accent-color) !important; }
 
-/* RESPONSIVE SMARTPHONE */
+/* RESPONSIVE SMARTPHONE - CORRETTO */
 @media (max-width: 768px) {
     .mobile-text { display: block; } /* FORZA SU DUE RIGHE */
     .desktop-text { display: none; }
-    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 0.9; margin-bottom: 15px; }
     
-    footer { position: relative; bottom: auto; padding: 30px 20px; flex-direction: column; gap: 15px; background: rgba(0,0,0,0.15); margin-top: 40px; }
+    h1.large-chilimangiaro { font-size: 3.5rem; line-height: 0.9; margin-bottom: 0; }
+    .tagline { font-size: 0.8rem; margin-top: 15px; }
+    
+    /* CENTRAGGIO ASSOLUTO BOTTONE: Fisso e visibile */
+    .volcano-sound-container { 
+        position: fixed; 
+        bottom: 150px; /* Ancorato saldamente sopra il footer */
+        left: 50%; 
+        transform: translateX(-50%); 
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 0;
+    }
+    #magma-sound-btn { min-width: 220px; font-size: 0.95rem; }
+    
+    /* FOOTER FISSO IN BASSO: Non scivola fuori dallo schermo */
+    footer { 
+        position: fixed; 
+        bottom: 0; 
+        left: 0;
+        width: 100%;
+        padding: 15px 10px; 
+        flex-direction: column; 
+        gap: 8px; 
+        background: rgba(0,0,0,0.6); 
+    }
     .footer-block.left, .footer-block.center, .footer-block.right { justify-content: center; text-align: center; width: 100%; }
-    
-    .volcano-sound-container { position: relative; bottom: auto; margin-top: 40px; }
-    #magma-sound-btn { min-width: 240px; }
+    .footer-link { font-size: 0.8rem; }
+    .credits-line { font-size: 0.65rem; }
     
     .overlay-content h2 { font-size: 1.8rem; }
     .manifesto-body p { font-size: 0.95rem; }
     .close-manifesto { top: 20px; right: 20px; padding: 8px 15px; }
     
-    body { overflow-y: auto; }
+    body { overflow: hidden; } /* DISABILITA LO SCROLL: TUTTO È NELLO SCHERMO */
 }
