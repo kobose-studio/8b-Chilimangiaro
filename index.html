@@ -6,7 +6,7 @@
     <title>8B & I CHILIMANGIARO | Magma Roots Ensemble</title>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=14.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
 <body>
@@ -54,11 +54,9 @@
                 <span>Booking | info@chilimangiaro.com</span>
             </a>
         </div>
-        
         <div class="footer-block center">
             <span class="credits-line">© 8B & I CHILIMANGIARO 2026 &nbsp;|&nbsp; DESIGN • <a href="http://kobose.it" target="_blank">KOBOSE</a></span>
         </div>
-
         <div class="footer-block right">
             <a href="https://www.instagram.com/ichilimangiaro/" target="_blank" class="footer-link">
                 <span>Instagram</span>
@@ -72,54 +70,35 @@
     </audio>
 
     <script>
-        function toggleManifesto() { 
-            document.getElementById('manifesto-overlay').classList.toggle('active'); 
-        }
+        function toggleManifesto() { document.getElementById('manifesto-overlay').classList.toggle('active'); }
 
         let magmaAudio = document.getElementById('magma-audio');
         let soundBtn = document.getElementById('magma-sound-btn');
         let trackInfo = document.getElementById('track-info');
         let isPlaying = false;
-
-        window.audioAmplitude = 0; 
-        let audioCtx, analyser, source, dataArray;
+        window.audioAmplitude = 0; let audioCtx, analyser, source, dataArray;
 
         function initAudio() {
             if (!audioCtx) {
                 let AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-                analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 256; 
-                source = audioCtx.createMediaElementSource(magmaAudio);
-                source.connect(analyser);
-                analyser.connect(audioCtx.destination);
+                audioCtx = new AudioContext(); analyser = audioCtx.createAnalyser(); analyser.fftSize = 256; 
+                source = audioCtx.createMediaElementSource(magmaAudio); source.connect(analyser); analyser.connect(audioCtx.destination);
                 dataArray = new Uint8Array(analyser.frequencyBinCount);
-                
                 function updateAmplitude() {
                     requestAnimationFrame(updateAmplitude);
-                    if (isPlaying) {
-                        analyser.getByteFrequencyData(dataArray);
-                        let sum = 0;
-                        for(let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
-                        window.audioAmplitude = sum / dataArray.length; 
-                    } else { window.audioAmplitude = 0; }
+                    if (isPlaying) { analyser.getByteFrequencyData(dataArray); let sum = 0; for(let i = 0; i < dataArray.length; i++) sum += dataArray[i]; window.audioAmplitude = sum / dataArray.length; } else { window.audioAmplitude = 0; }
                 }
                 updateAmplitude();
             }
         }
 
         function toggleMagmaSound() {
-            initAudio(); 
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            initAudio(); if (audioCtx.state === 'suspended') audioCtx.resume();
             if (isPlaying) {
-                magmaAudio.pause();
-                soundBtn.innerText = "VOLCANO SOUND: OFF";
-                soundBtn.classList.remove('playing');
+                magmaAudio.pause(); soundBtn.innerText = "VOLCANO SOUND: OFF"; soundBtn.classList.remove('playing');
                 if(trackInfo) trackInfo.classList.remove('active');
             } else {
-                magmaAudio.play().catch(e => console.log("Segnale bloccato."));
-                soundBtn.innerText = "VOLCANO SOUND: ON";
-                soundBtn.classList.add('playing');
+                magmaAudio.play().catch(e => console.log("Segnale bloccato.")); soundBtn.innerText = "VOLCANO SOUND: ON"; soundBtn.classList.add('playing');
                 if(trackInfo) trackInfo.classList.add('active');
             }
             isPlaying = !isPlaying;
