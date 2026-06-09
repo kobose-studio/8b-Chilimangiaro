@@ -6,14 +6,14 @@
     <title>8B & I CHILIMANGIARO | Magma Roots Ensemble</title>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=3.1">
+    <link rel="stylesheet" href="style.css?v=5.5">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
 </head>
 <body>
 
-    <div class="serial-number manifesto-trigger" onclick="toggleManifesto()">
+    <div class="serial-number manifesto-trigger" onclick="openSection('manifesto')">
         <span class="default-text">8B & I CHILIMANGIARO</span>
-        <span class="hover-text">/¯\&nbsp; MAGMA ROOTS ENSEMBLE &nbsp;/¯\</span>
+        <span class="hover-text">CHILIMANGIARO &nbsp;/¯\&nbsp; MANIFESTO</span>
     </div>
 
     <div id="canvas-container"></div>
@@ -34,17 +34,39 @@
     </div>
 
     <div id="manifesto-overlay" class="overlay">
-        <button class="close-manifesto" onclick="toggleManifesto()">[ CLOSE_X ]</button>
+        <button class="close-manifesto" onclick="closeAllSections()">[ CLOSE_X ]</button>
         <div class="overlay-content">
             <div class="manifesto-body">
                 <h2 class="m-highlight">8B & I CHILIMANGIARO</h2>
                 <p class="m-subhighlight">/¯\ Magma Roots Ensemble /¯\</p>
                 
-<p><strong>I Chilimangiaro</strong> is a collective born to deconstruct the boundaries of sound. With Roots Reggae as the absolute protagonist, we take the solid foundations of Roots Lovers, transforming them into an organic flow of Tropical Magma, Dub & Jazzy-Funky Ska Soul.</p>
-<p>We call this vital energy <strong>eRoots (Earth Roots)</strong>: a deep connection to the planet and to human brotherhood, translated into heavy grooves and conscious lightness. It’s our way of honoring the earth, celebrating it with playfulness and a vibrant joy of Being.</p>
-<p>Inside the <strong>Sonic Crater</strong> (Cratere Sonoro)—a physical and mental space shaped by 8B’s sonic coordinates and brought to life by the band's interplay—low frequencies dictate the law. Here, the "Levare" rhythm becomes the heartbeat of a collective ritual.</p>
+                <p><strong>I Chilimangiaro</strong> è un collettivo nato per decostruire i confini della materia sonora. Prendiamo le fondamenta ancestrali del Reggae, del Dub e del Funk e le fondiamo in un flusso magnetico che unisce la terra all'avanguardia.</p>
+                <p>Non lo chiamiamo genere; lo chiamiamo <strong>Magma</strong>. Una connessione viscerale con il battito primordiale, tradotta in groove pesanti, sezioni di fiati taglienti e ipnosi ritmica. È la nostra dDiarazione di appartenenza al suolo che calpestiamo e all'aria in cui disperdiamo le nostre frequenze.</p>
+                <p>All'interno del <strong>Cratere Sonoro</strong> — uno spazio fisico e mentalmente plasmato dalle coordinate di 8B e reso vivo dall'interazione della band — le basse frequenze dettano la legge. Qui, il ritmo in "Levare" cessa di essere una scelta stilistica e diventerà il battito cardiaco di un rituale collettivo in continua evoluzione.</p>
                 
-                <p class="m-footer">No borders. No gurus. No clichés. Just Magma.</p>
+                <p class="m-footer">Nessun confine. Nessun guru. Solo Magma.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="presskit-overlay" class="overlay">
+        <button class="close-manifesto" onclick="closeAllSections()">[ CLOSE_X ]</button>
+        <div class="overlay-content">
+            <div class="manifesto-body">
+                <h2 class="m-highlight" style="font-size: 1.8rem; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px;">
+                    chilimangiaro press kit  •  shows  •  stage setup
+                </h2>
+                
+                <p>Benvenuto nell'archivio digitale riservato dei <strong>Chilimangiaro</strong>. Questa sezione protetta raccoglie tutti i materiali ufficiali dedicati a promoter, festival, testate giornalistiche e ingegneri del suono.</p>
+                <p style="opacity: 0.8; margin-top: 15px;">Il pacchetto (.ZIP) include: Selezione Foto in Alta Risoluzione, Video Ufficiali, Biografia della Band, Informazioni dettagliate sugli Show e Scheda Tecnica / Rider per lo Stage Setup.</p>
+                
+                <p style="margin-top: 45px; margin-bottom: 45px;">
+                    <a href="URL_DEL_TUO_GOOGLE_DRIVE" target="_blank" style="display: inline-block; padding: 12px 35px; min-width: 290px; background: transparent; border: 2px solid var(--accent-color, #D64933); color: var(--accent-color, #D64933); font-family: inherit; font-size: 1rem; cursor: pointer; transition: 0.3s; pointer-events: auto; text-decoration: none; text-transform: uppercase;">
+                        [ Download Press Kit ]
+                    </a>
+                </p>
+                
+                <p class="m-footer" style="font-size: 0.75rem; opacity: 0.5;">Secure Transmission Node. Do not redistribute without authorization.</p>
             </div>
         </div>
     </div>
@@ -70,12 +92,39 @@
     <audio id="magma-audio" loop preload="auto" crossorigin="anonymous"><source src="media/LOWEWELL_8B_e_i_Chilimangiaro_loop_homepage_25sec.mp3" type="audio/mpeg"></audio>
 
     <script>
-        function toggleManifesto() { document.getElementById('manifesto-overlay').classList.toggle('active'); }
         let magmaAudio = document.getElementById('magma-audio');
         let soundBtn = document.getElementById('magma-sound-btn');
         let trackInfo = document.getElementById('track-info');
         let isPlaying = false;
         window.audioAmplitude = 0; let audioCtx, analyser, source, dataArray;
+        
+        // FUNZIONI DI ROUTING AGGIORNATE
+        function openSection(id) { 
+            window.location.hash = id;
+        }
+        
+        function closeAllSections() { 
+            if (window.location.hash) {
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            }
+            document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active')); 
+        }
+
+        function handleRouting() {
+            let hash = window.location.hash.replace('#', '');
+            document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active')); 
+            
+            if (hash === 'manifesto') {
+                document.getElementById('manifesto-overlay').classList.add('active');
+            } else if (hash === 'press-kit' || hash === 'presskit') {
+                document.getElementById('presskit-overlay').classList.add('active');
+            }
+        }
+
+        window.addEventListener('hashchange', handleRouting);
+        window.addEventListener('load', handleRouting);
+
+        // AUDIO ENGINE CONTROL
         function initAudio() {
             if (!audioCtx) {
                 let AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -89,6 +138,7 @@
                 updateAmplitude();
             }
         }
+
         function toggleMagmaSound() {
             initAudio(); if (audioCtx.state === 'suspended') audioCtx.resume();
             if (isPlaying) { magmaAudio.pause(); soundBtn.innerText = "VOLCANO SOUND: OFF"; soundBtn.classList.remove('playing'); if(trackInfo) trackInfo.classList.remove('active'); } 
